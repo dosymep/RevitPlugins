@@ -1,0 +1,149 @@
+<base:PlatformWindow
+    x:Class="Revit3DvikSchemas.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+    xmlns:base="clr-namespace:dosymep.WPF.Views"
+    xmlns:local="clr-namespace:Revit3DvikSchemas.Views"
+    xmlns:vms="clr-namespace:Revit3DvikSchemas.ViewModels"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner"
+    
+    Title="MainWindow"
+    Height="450" Width="500"
+    ResizeMode="NoResize"
+    d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}"
+    >
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="43" />
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal">
+            <TextBlock
+                Width="108" Height="20"
+                Margin="25,0,0,0" Text="Фильтровать по:">
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            >
+            <ComboBox
+                SelectedIndex="0"
+                Width="170" Height="20"
+                Margin="25,0,0,0"
+                ItemsSource="{Binding ComboBoxVars}"
+                SelectedItem="{Binding SelectedElementType}">
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=SelectionFilterCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+            </ComboBox>
+
+            <TextBox
+                Text="{Binding Path=CategoriesFilter, UpdateSourceTrigger=PropertyChanged}"
+                Width="150" Height="20"
+                Margin="25,0,0,0"
+                />
+        </StackPanel>
+
+        <ListView
+            x:Name="HvacSystems"
+            Margin="25,0,25,0"
+            Grid.Row="2"
+            SelectionMode="Extended"
+            ItemsSource="{Binding RevitHVACSystems, UpdateSourceTrigger=PropertyChanged }"
+            >
+            <ListView.View>
+                <GridView AllowsColumnReorder="False" ColumnHeaderToolTip="Список систем">
+                    <GridView.Columns>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=SystemName}" Header="Имя системы" Width="150" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FopName}" Header="_ФОП_ВИС_Имя системы" Width="150"/>
+                        <GridViewColumn
+                        Width="150"
+                        Header="Создать схему"    
+                            >
+                            <GridViewColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox
+                                        Checked="CheckBox_Checked"
+                                        Unchecked="CheckBox_Unchecked"
+                                        IsChecked="{Binding IsChecked}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel
+            Grid.Row="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox 
+                        Grid.Column="0"
+                        Margin="10 5"
+                        FlowDirection="RightToLeft"
+                        Content="Все выделенные на один вид"
+                        IsChecked="{Binding CombineFilters}">
+                </CheckBox>
+
+                <CheckBox 
+                        Grid.Column="1"
+                        Margin="10 5"
+                        Content="Схемы по ФОП__ВИС__Имя системы"
+                        IsChecked="{Binding UseFopNames}"/>
+
+            </Grid>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="4"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            >
+            <TextBlock
+                Margin="5,0,5,10"
+                Width="270"
+                Foreground="Orange"
+                VerticalAlignment="Top"
+                TextWrapping="Wrap"
+                Text="{Binding ErrorText}" />
+
+            <Button
+                Margin="5,0,5,10"
+                Width="80"
+                Content="ОК"
+                IsDefault="True"
+                Click="ButtonOk_Click"
+                Command="{Binding CreateViewCommand}" Height="30" />
+            <Button
+                Margin="5,0,25,10"
+                Width="80"
+                Content="Отмена"
+                IsCancel="True"
+                Click="ButtonCancel_Click" Height="30" />
+        </StackPanel>
+    </Grid>
+</base:PlatformWindow>

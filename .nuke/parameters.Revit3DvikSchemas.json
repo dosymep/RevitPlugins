@@ -1,0 +1,10 @@
+{
+  "$schema": "./build.schema.json",
+  "Solution": "RevitPlugins.sln",
+  "PluginName": "Revit3DvikSchemas",
+  "PublishDirectory": "04.OV-VK.extension\\ОВиВК.tab\\bin",
+  "IconUrl": "https://icons8.com/icon/46281/3d-object",
+  "BundleName": "Сформировать схемы",
+  "BundleType": "InvokeButton",
+  "BundleOutput": "04.OV-VK.extension\\ОВиВК.tab\\Виды.panel\\Сформировать схемы.pushbutton"
+}

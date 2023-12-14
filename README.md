@@ -33,6 +33,7 @@
 | 20. | Документация пилонов      | [RevitPylonDocumentation](RevitPylonDocumentation) | [Confluence](https://kb.a101.ru/pages/viewpage.action?pageId=67829985)  | [КР](https://github.com/dosymep/KRExtensions)       | Документация  |
 | 21. | Удалить неиспользуемые    | [RevitDeleteUnused](RevitDeleteUnused)             | [Confluence](https://kb.a101.ru/pages/viewpage.action?pageId=67830008)  | [BIM](https://github.com/dosymep/BIMExtensions)     | Прочее        |
 | 22. | Выгрузить объемы          | [RevitMepTotals](RevitMepTotals)                   | [Confluence]()                                                          | [BIM](https://github.com/dosymep/BIMExtensions)     | Экспорт       |
+| 23. | Сформировать схемы        | [Revit3DvikSchemas](Revit3DvikSchemas)             | [Confluence]()                                                          | [BIM](https://github.com/dosymep/BIMExtensions)     | ОВиВК         |
 
 # Сборка проекта
 
