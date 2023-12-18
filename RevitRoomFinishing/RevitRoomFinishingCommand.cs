@@ -21,7 +21,7 @@ namespace RevitRoomFinishing {
     [Transaction(TransactionMode.Manual)]
     public class RevitRoomFinishingCommand : BasePluginCommand {
         public RevitRoomFinishingCommand() {
-            PluginName = "RevitRoomFinishing";
+            PluginName = "Отделка помещений";
         }
 
         protected override void Execute(UIApplication uiApplication) {

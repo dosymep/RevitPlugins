@@ -1,4 +1,3 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="..\ProjectProps\Common.props" />
-    <Import Project="..\ProjectProps\DevExpress.props" />
 </Project>

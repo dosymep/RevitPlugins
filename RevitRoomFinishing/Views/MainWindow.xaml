@@ -1,4 +1,4 @@
-<base:ThemedPlatformWindow
+<base:PlatformWindow
     x:Class="RevitRoomFinishing.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -21,17 +21,13 @@
 
     d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}">
     
-    <dxmvvm:Interaction.Behaviors>
-        <dxmvvm:EventToCommand EventName="Loaded" Command="{Binding LoadViewCommand}"/>
-    </dxmvvm:Interaction.Behaviors>
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <dxe:TextEdit
+        <TextBlock
             Grid.Row="0"
             Width="200"
             VerticalAlignment="Center"
@@ -50,7 +46,7 @@
                 VerticalAlignment="Center"
                 Text="{Binding ErrorText}" />
 
-            <dx:SimpleButton
+            <Button
                 Margin="10"
                 Width="80"
                 Content="ОК"
@@ -58,7 +54,7 @@
                 Click="ButtonOk_Click"
                 Command="{Binding AcceptViewCommand}" />
 
-            <dx:SimpleButton
+            <Button
                 Margin="10"
                 Width="80"
                 Content="Отмена"
@@ -66,4 +62,4 @@
                 Click="ButtonCancel_Click" />
         </StackPanel>
     </Grid>
-</base:ThemedPlatformWindow>
+</base:PlatformWindow>
