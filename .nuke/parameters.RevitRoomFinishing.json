@@ -1,0 +1,10 @@
+{
+  "$schema": "./build.schema.json",
+  "Solution": "RevitPlugins.sln",
+  "PluginName": "RevitRoomFinishing",
+  "PublishDirectory": "02.AR.extension\\АР.tab\\bin",
+  "IconUrl": "https://icons8.com/icon/15075/paint-roller",
+  "BundleName": "Отделка помещений",
+  "BundleType": "InvokeButton",
+  "BundleOutput": "02.AR.extension\\АР.tab\\Отделка.panel"
+}
