@@ -17,26 +17,115 @@
     WindowStartupLocation="CenterOwner"
     
     Title="MainWindow"
-    Height="450" Width="800"    
+    Height="700" Width="700"    
 
     d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}">
     
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <TextBlock
-            Grid.Row="0"
-            Width="200"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
 
-            Text="{Binding SaveProperty}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            Margin="10">
+            <TextBlock
+                DockPanel.Dock="Left"
+                Width="80"
+                Text="Стадии:"/>
+            <ComboBox
+                Height="25"
+                DataContext="{Binding RevitViewModel}"
+                ItemsSource="{Binding TagFamilies}"
+                DisplayMemberPath="Name"
+                SelectedItem="{Binding SelectedTagType}"/>
+        </DockPanel>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Margin="10"
+            Text="Имена помещений:"/>
+
+        <ListBox
+            x:Name="RoomGroups"
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            Margin="10, 5"
+            Height="200"
+            SelectionMode="Extended"
+            DataContext="{Binding RevitViewModel}"
+            ItemsSource="{Binding RoomGroups}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}"
+                              Checked="CheckBox_Checked"
+                              Unchecked="CheckBox_Unchecked"
+                              IsChecked="{Binding IsChecked}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="10, 5"
+            HorizontalAlignment="Center"
+            Text="Стены:"/>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="10, 5"
+            HorizontalAlignment="Center"
+            Text="Перекрытия:"/>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="2"
+            Margin="10, 5"
+            HorizontalAlignment="Center"
+            Text="Потолки:"/>
+
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="10, 5"
+            Height="25"
+            Width="140"
+            HorizontalAlignment="Center"/>
+
+        <ListBox
+            Grid.Row="5"
+            Grid.Column="0"
+            Margin="10, 5"
+            SelectionMode="Extended"
+            DataContext="{Binding RevitViewModel}"
+            ItemsSource="{Binding RoomGroups}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}"
+                              Checked="CheckBox_Checked"
+                              Unchecked="CheckBox_Unchecked"
+                              IsChecked="{Binding IsChecked}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="6"
+            Grid.ColumnSpan="3"
             Height="45"
             Orientation="Horizontal"
             HorizontalAlignment="Right">
