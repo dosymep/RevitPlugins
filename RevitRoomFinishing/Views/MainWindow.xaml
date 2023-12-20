@@ -48,10 +48,9 @@
                 Text="Стадии:"/>
             <ComboBox
                 Height="25"
-                DataContext="{Binding RevitViewModel}"
-                ItemsSource="{Binding TagFamilies}"
+                ItemsSource="{Binding Phases}"
                 DisplayMemberPath="Name"
-                SelectedItem="{Binding SelectedTagType}"/>
+                SelectedItem="{Binding SelectedPhase}"/>
         </DockPanel>
 
         <TextBlock
@@ -67,12 +66,10 @@
             Margin="10, 5"
             Height="200"
             SelectionMode="Extended"
-            DataContext="{Binding RevitViewModel}"
-            ItemsSource="{Binding RoomGroups}">
+            ItemsSource="{Binding Rooms}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Name}"
-                              Checked="CheckBox_Checked"
+                    <CheckBox Checked="CheckBox_Checked"
                               Unchecked="CheckBox_Unchecked"
                               IsChecked="{Binding IsChecked}"/>
                 </DataTemplate>

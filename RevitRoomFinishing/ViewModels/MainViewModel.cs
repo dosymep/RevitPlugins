@@ -1,4 +1,10 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Documents;
 using System.Windows.Input;
+
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
 
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
@@ -10,6 +16,11 @@ namespace RevitRoomFinishing.ViewModels {
         private readonly PluginConfig _pluginConfig;
         private readonly RevitRepository _revitRepository;
 
+        private List<Phase> _phases;
+        private Phase _selectedPhase;
+
+        private ObservableCollection<string> _rooms;
+
         private string _errorText;
         private string _saveProperty;
 
@@ -17,8 +28,25 @@ namespace RevitRoomFinishing.ViewModels {
             _pluginConfig = pluginConfig;
             _revitRepository = revitRepository;
 
+            _phases = _revitRepository.GetPhases();            
+
             LoadViewCommand = RelayCommand.Create(LoadView);
             AcceptViewCommand = RelayCommand.Create(AcceptView, CanAcceptView);
+        }
+
+        public List<Phase> Phases => _phases;
+
+        public Phase SelectedPhase {
+            get => _selectedPhase;
+            set {
+                this.RaiseAndSetIfChanged(ref _selectedPhase, value);
+                OnPropertyChanged("Rooms");
+            }
+        }
+
+        public ObservableCollection<string> Rooms {
+            get => _revitRepository.GetRoomNamesOnPhase(_selectedPhase);
+            set => this.RaiseAndSetIfChanged(ref _rooms, value);
         }
 
         public ICommand LoadViewCommand { get; }
