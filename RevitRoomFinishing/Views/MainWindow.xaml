@@ -69,7 +69,8 @@
             ItemsSource="{Binding Rooms}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Checked="CheckBox_Checked"
+                    <CheckBox Content="{Binding Name}"
+                              Checked="CheckBox_Checked"
                               Unchecked="CheckBox_Unchecked"
                               IsChecked="{Binding IsChecked}"/>
                 </DataTemplate>

@@ -19,7 +19,7 @@ namespace RevitRoomFinishing.ViewModels {
         private List<Phase> _phases;
         private Phase _selectedPhase;
 
-        private ObservableCollection<string> _rooms;
+        private ObservableCollection<RoomsByNameViewModel> _rooms;
 
         private string _errorText;
         private string _saveProperty;
@@ -44,7 +44,7 @@ namespace RevitRoomFinishing.ViewModels {
             }
         }
 
-        public ObservableCollection<string> Rooms {
+        public ObservableCollection<RoomsByNameViewModel> Rooms {
             get => _revitRepository.GetRoomNamesOnPhase(_selectedPhase);
             set => this.RaiseAndSetIfChanged(ref _rooms, value);
         }
