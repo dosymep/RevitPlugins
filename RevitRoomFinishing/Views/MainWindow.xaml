@@ -33,9 +33,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
         <DockPanel
@@ -83,12 +83,60 @@
             Margin="10, 5"
             HorizontalAlignment="Center"
             Text="Стены:"/>
+
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="10, 5"
+            Height="25"
+            HorizontalAlignment="Stretch"/>
+
+        <ListBox
+            Grid.Row="5"
+            Grid.Column="0"
+            Margin="10, 5"
+            SelectionMode="Extended"
+            ItemsSource="{Binding WallTypes}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}"
+                              Checked="CheckBox_Checked"
+                              Unchecked="CheckBox_Unchecked"
+                              IsChecked="{Binding IsChecked}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <TextBlock
             Grid.Row="3"
             Grid.Column="1"
             Margin="10, 5"
             HorizontalAlignment="Center"
             Text="Перекрытия:"/>
+
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="10, 5"
+            Height="25"
+            HorizontalAlignment="Stretch"/>
+
+        <ListBox
+            Grid.Row="5"
+            Grid.Column="1"
+            Margin="10, 5"
+            SelectionMode="Extended"
+            ItemsSource="{Binding FloorTypes}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}"
+                              Checked="CheckBox_Checked"
+                              Unchecked="CheckBox_Unchecked"
+                              IsChecked="{Binding IsChecked}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <TextBlock
             Grid.Row="3"
             Grid.Column="2"
@@ -98,19 +146,17 @@
 
         <TextBox
             Grid.Row="4"
-            Grid.Column="0"
+            Grid.Column="2"
             Margin="10, 5"
             Height="25"
-            Width="140"
-            HorizontalAlignment="Center"/>
+            HorizontalAlignment="Stretch"/>
 
         <ListBox
             Grid.Row="5"
-            Grid.Column="0"
+            Grid.Column="2"
             Margin="10, 5"
             SelectionMode="Extended"
-            DataContext="{Binding RevitViewModel}"
-            ItemsSource="{Binding RoomGroups}">
+            ItemsSource="{Binding CeilingTypes}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox Content="{Binding Name}"
