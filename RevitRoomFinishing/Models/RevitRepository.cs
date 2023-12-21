@@ -10,6 +10,8 @@ using Autodesk.Revit.UI;
 using dosymep.Bim4Everyone;
 using dosymep.Revit;
 
+using Ninject.Activation;
+
 using RevitRoomFinishing.ViewModels;
 
 namespace RevitRoomFinishing.Models {
@@ -25,10 +27,15 @@ namespace RevitRoomFinishing.Models {
         public Document Document => ActiveUIDocument.Document;
 
         public ObservableCollection<RoomsByNameViewModel> GetRoomNamesOnPhase(Phase phase) {
+            ParameterValueProvider valueProvider = new ParameterValueProvider(new ElementId(BuiltInParameter.ROOM_PHASE));
+            FilterNumericEquals ruleEvaluator = new FilterNumericEquals();
+            FilterElementIdRule filterRule = new FilterElementIdRule(valueProvider, ruleEvaluator, phase.Id);
+            ElementParameterFilter parameterFilter = new ElementParameterFilter(filterRule);
+
             var rooms = new FilteredElementCollector(Document)
                 .OfCategory(BuiltInCategory.OST_Rooms)
+                .WherePasses(parameterFilter)
                 .OfType<Room>()
-                .Where(x => x.GetParamValueOrDefault<ElementId>(BuiltInParameter.ROOM_PHASE) == phase.Id)
                 .GroupBy(x => x.GetParamValueOrDefault(BuiltInParameter.ROOM_NAME, "<Без имени>"))
                 .Select(x => new RoomsByNameViewModel(x.Key.ToString(), x))
                 .ToList();
@@ -37,10 +44,7 @@ namespace RevitRoomFinishing.Models {
         }
 
         public List<Phase> GetPhases() {
-            return new FilteredElementCollector(Document)
-                .OfCategory(BuiltInCategory.OST_Phases)
-                .OfType<Phase>()
-                .ToList();
+            return Document.Phases.OfType<Phase>().ToList();
         }
     }
 }
