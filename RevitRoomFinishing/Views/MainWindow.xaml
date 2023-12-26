@@ -192,7 +192,8 @@
                 Width="80"
                 Content="Отмена"
                 IsCancel="True"
-                Click="ButtonCancel_Click" />
+                Click="ButtonCancel_Click"
+                Command="{Binding CalculateFinishingCommand}"/>
         </StackPanel>
     </Grid>
 </base:PlatformWindow>
