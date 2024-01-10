@@ -73,7 +73,7 @@ namespace RevitRoomFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
-
+            _revitRepository.GroupRoomsByFinishing(Rooms);
         }
 
         private bool CanCalculateFinishing() {

@@ -67,5 +67,19 @@ namespace RevitRoomFinishing.Models {
         public List<Phase> GetPhases() {
             return Document.Phases.OfType<Phase>().ToList();
         }
+
+        public void GroupRoomsByFinishing(ObservableCollection<ElementsGroup> roomNames) {
+            List<Element> selectedRooms = roomNames
+                .Where(x => x.IsChecked)
+                .SelectMany(x => x.Elements)
+                .ToList();
+
+            List<RoomElement> finishingRooms = selectedRooms
+                .OfType<Room>()
+                .Select(x => new RoomElement(x))
+                .ToList();
+
+
+        }
     }
 }

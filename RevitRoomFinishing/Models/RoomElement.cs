@@ -13,11 +13,9 @@ namespace RevitRoomFinishing.Models
 {
     class RoomElement {
         Room _room;
-        Document _document;
 
-        public RoomElement(Room room, Document document) {
+        public RoomElement(Room room) {
             _room = room;
-            _document = document;
         }
 
         public List<Element> GetBoundaryWalls() {
@@ -27,7 +25,7 @@ namespace RevitRoomFinishing.Models
                 .SelectMany(x => x)
                 .Select(x => x.ElementId)
                 .Where(x => x.IsNotNull())
-                .Select(x => _document.GetElement(x))
+                .Select(x => _room.Document.GetElement(x))
                 .Where(x => x.Category?.Id == wallCategoryId)
                 .ToList();
         }

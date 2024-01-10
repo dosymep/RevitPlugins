@@ -17,7 +17,8 @@
     WindowStartupLocation="CenterOwner"
     
     Title="MainWindow"
-    Height="700" Width="700"    
+    Height="700" Width="700"
+    MinHeight="700" MinWidth="700"
 
     d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}">
     
