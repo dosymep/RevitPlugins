@@ -19,10 +19,10 @@ namespace RevitRoomFinishing.ViewModels {
         private List<Phase> _phases;
         private Phase _selectedPhase;
 
-        private ObservableCollection<ElementsGroup> _rooms;
-        private ObservableCollection<ElementsGroup> _wallTypes;
-        private ObservableCollection<ElementsGroup> _floorTypes;
-        private ObservableCollection<ElementsGroup> _ceilingTypes;
+        private ObservableCollection<ElementsGroupViewModel> _rooms;
+        private ObservableCollection<ElementsGroupViewModel> _wallTypes;
+        private ObservableCollection<ElementsGroupViewModel> _floorTypes;
+        private ObservableCollection<ElementsGroupViewModel> _ceilingTypes;
 
         private string _errorText;
 
@@ -52,28 +52,28 @@ namespace RevitRoomFinishing.ViewModels {
             }
         }
 
-        public ObservableCollection<ElementsGroup> Rooms {
-            get => _revitRepository.GetRoomNamesOnPhase(_selectedPhase);
+        public ObservableCollection<ElementsGroupViewModel> Rooms {
+            get => _revitRepository.GetRoomsOnPhase(_selectedPhase);
             set => this.RaiseAndSetIfChanged(ref _rooms, value);
         }
 
-        public ObservableCollection<ElementsGroup> WallTypes {
+        public ObservableCollection<ElementsGroupViewModel> WallTypes {
             get => _wallTypes;
             set => this.RaiseAndSetIfChanged(ref _wallTypes, value);
         }
 
-        public ObservableCollection<ElementsGroup> FloorTypes {
+        public ObservableCollection<ElementsGroupViewModel> FloorTypes {
             get => _floorTypes;
             set => this.RaiseAndSetIfChanged(ref _floorTypes, value);
         }
 
-        public ObservableCollection<ElementsGroup> CeilingTypes {
+        public ObservableCollection<ElementsGroupViewModel> CeilingTypes {
             get => _ceilingTypes;
             set => this.RaiseAndSetIfChanged(ref _ceilingTypes, value);
         }
 
         private void CalculateFinishing() {
-            _revitRepository.GroupRoomsByFinishing(Rooms);
+
         }
 
         private bool CanCalculateFinishing() {
