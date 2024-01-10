@@ -11,12 +11,16 @@ using dosymep.WPF.ViewModels;
 
 namespace RevitRoomFinishing.ViewModels
 {
-    class ElementsGroup : BaseViewModel {
+    /// <summary>
+    /// Класс для группирования элементов Revit
+    /// и вывода этой группы в GUI в виде CheckBox
+    /// </summary>
+    class ElementsGroupViewModel : BaseViewModel {
         private readonly string _name;
         private readonly IReadOnlyCollection<Element> _elements;
         private bool _isChecked;
 
-        public ElementsGroup(string name, IEnumerable<Element> elements) {
+        public ElementsGroupViewModel(string name, IEnumerable<Element> elements) {
             _elements = elements.ToList();
             _name = name;
         }
