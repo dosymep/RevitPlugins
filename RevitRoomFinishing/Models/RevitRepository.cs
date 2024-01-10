@@ -27,7 +27,7 @@ namespace RevitRoomFinishing.Models {
         public Application Application => UIApplication.Application;
         public Document Document => ActiveUIDocument.Document;
 
-        public ObservableCollection<ElementsGroup> GetRoomNamesOnPhase(Phase phase) {
+        public ObservableCollection<ElementsGroupViewModel> GetRoomsOnPhase(Phase phase) {
             ParameterValueProvider valueProvider = new ParameterValueProvider(new ElementId(BuiltInParameter.ROOM_PHASE));
             FilterNumericEquals ruleEvaluator = new FilterNumericEquals();
             FilterElementIdRule filterRule = new FilterElementIdRule(valueProvider, ruleEvaluator, phase.Id);
@@ -38,10 +38,10 @@ namespace RevitRoomFinishing.Models {
                 .WherePasses(parameterFilter)
                 .OfType<Room>()
                 .GroupBy(x => x.GetParamValueOrDefault(BuiltInParameter.ROOM_NAME, "<Без имени>"))
-                .Select(x => new ElementsGroup(x.Key.ToString(), x))
+                .Select(x => new ElementsGroupViewModel(x.Key.ToString(), x))
                 .ToList();
 
-            return new ObservableCollection<ElementsGroup>(rooms);
+            return new ObservableCollection<ElementsGroupViewModel>(rooms);
         }
 
         public bool CheckIsElementOnPhase(Element element, Phase phase) {
@@ -52,34 +52,20 @@ namespace RevitRoomFinishing.Models {
             return false;
         }
 
-        public ObservableCollection<ElementsGroup> GetFinishingTypes(BuiltInCategory category) {
-            var wallTypes = new FilteredElementCollector(Document)
+        public ObservableCollection<ElementsGroupViewModel> GetFinishingTypes(BuiltInCategory category) {
+            var finishingTypes = new FilteredElementCollector(Document)
                 .OfCategory(category)
                 .WhereElementIsNotElementType()
                 .Select(x => Document.GetElement(x.GetTypeId()))
                 .GroupBy(x => x.Name)
-                .Select(x => new ElementsGroup(x.Key, x))
+                .Select(x => new ElementsGroupViewModel(x.Key, x))
                 .ToList();
 
-            return new ObservableCollection<ElementsGroup>(wallTypes);
+            return new ObservableCollection<ElementsGroupViewModel>(finishingTypes);
         }
 
         public List<Phase> GetPhases() {
             return Document.Phases.OfType<Phase>().ToList();
-        }
-
-        public void GroupRoomsByFinishing(ObservableCollection<ElementsGroup> roomNames) {
-            List<Element> selectedRooms = roomNames
-                .Where(x => x.IsChecked)
-                .SelectMany(x => x.Elements)
-                .ToList();
-
-            List<RoomElement> finishingRooms = selectedRooms
-                .OfType<Room>()
-                .Select(x => new RoomElement(x))
-                .ToList();
-
-
         }
     }
 }
