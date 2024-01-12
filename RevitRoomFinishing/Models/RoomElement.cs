@@ -20,6 +20,10 @@ namespace RevitRoomFinishing.Models
 
         public Room RevitRoom => _room;
 
+        public void CalculateFinishingOrder() {
+
+        }
+
         public List<Element> GetBoundaryWalls() {
             ElementId wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
