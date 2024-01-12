@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Documents;
 using System.Windows.Input;
 
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 
+using dosymep.Revit;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
@@ -48,12 +50,13 @@ namespace RevitRoomFinishing.ViewModels {
             get => _selectedPhase;
             set {
                 this.RaiseAndSetIfChanged(ref _selectedPhase, value);
+                _rooms = _revitRepository.GetRoomsOnPhase(_selectedPhase);
                 OnPropertyChanged("Rooms");
             }
         }
 
         public ObservableCollection<ElementsGroupViewModel> Rooms {
-            get => _revitRepository.GetRoomsOnPhase(_selectedPhase);
+            get => _rooms;
             set => this.RaiseAndSetIfChanged(ref _rooms, value);
         }
 
@@ -73,12 +76,24 @@ namespace RevitRoomFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
+            FinishingCalculator calculator = new FinishingCalculator(Rooms);
+            List<FinishingElement> finishings = calculator.Finishings;
 
+            using(Transaction t = _revitRepository.Document.StartTransaction("Заполнить параметры отделки")) {
+                foreach(var element in finishings) {
+                    element.UpdateFinishingParameters();
+                }
+                t.Commit();
+            }
         }
 
         private bool CanCalculateFinishing() {
             if(Rooms.Count == 0) {
                 ErrorText = "Помещения отсутствуют на выбранной стадии";
+                return false;
+            }
+            if(!Rooms.Any(x => x.IsChecked)) {
+                ErrorText = "Помещения не выбраны";
                 return false;
             }
 
