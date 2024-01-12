@@ -186,15 +186,14 @@
                 Content="ОК"
                 IsDefault="True"
                 Click="ButtonOk_Click"
-                Command="{Binding AcceptViewCommand}" />
+                Command="{Binding CalculateFinishingCommand}" />
 
             <Button
                 Margin="10"
                 Width="80"
                 Content="Отмена"
                 IsCancel="True"
-                Click="ButtonCancel_Click"
-                Command="{Binding CalculateFinishingCommand}"/>
+                Click="ButtonCancel_Click"/>
         </StackPanel>
     </Grid>
 </base:PlatformWindow>
