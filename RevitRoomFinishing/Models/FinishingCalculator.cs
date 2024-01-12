@@ -24,7 +24,7 @@ namespace RevitRoomFinishing.Models
 
         public List<FinishingElement> Finishings => _finishings;
 
-        public List<FinishingElement> SetRoomsForFinishing() {
+        private List<FinishingElement> SetRoomsForFinishing() {
             List<Element> selectedRooms = _rooms
                 .Where(x => x.IsChecked)
                 .SelectMany(x => x.Elements)

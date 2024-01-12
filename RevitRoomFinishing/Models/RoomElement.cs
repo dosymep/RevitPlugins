@@ -18,6 +18,8 @@ namespace RevitRoomFinishing.Models
             _room = room;
         }
 
+        public Room RevitRoom => _room;
+
         public List<Element> GetBoundaryWalls() {
             ElementId wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
