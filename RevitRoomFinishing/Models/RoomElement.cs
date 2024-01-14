@@ -16,7 +16,9 @@ namespace RevitRoomFinishing.Models
         private readonly List<Element> _walls;
         private readonly List<Element> _floors;
         private readonly List<Element> _ceilings;
-        private List<string> _wallTypes;
+        private List<string> _wallTypesByOrder;
+        private List<string> _floorTypesByOrder;
+        private List<string> _ceilingTypesByOrder;
 
 
         public RoomElement(Room room) {
@@ -25,7 +27,9 @@ namespace RevitRoomFinishing.Models
             _floors = GetFloors();
             _ceilings = GetCeilings();
 
-            CalculateFinishingOrder();
+            _wallTypesByOrder = CalculateFinishingOrder(_walls);
+            _floorTypesByOrder = CalculateFinishingOrder(_floors);
+            _ceilingTypesByOrder = CalculateFinishingOrder(_ceilings);
         }
 
         public Room RevitRoom => _room;
@@ -33,16 +37,24 @@ namespace RevitRoomFinishing.Models
         public List<Element> Floors => _floors;
         public List<Element> Ceilings => _ceilings;
 
-        public void CalculateFinishingOrder() {
-            _wallTypes = _walls
-                    .Select(x => x.Name)
-                    .Distinct()
-                    .OrderBy(x => x)
-                    .ToList();
+        private List<string> CalculateFinishingOrder(List<Element> roomElements) {
+            return roomElements
+                .Select(x => x.Name)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
         }
 
-        public int GetFinishingOrder(string typeName) {
-            return _wallTypes.IndexOf(typeName) + 1;
+        public int GetFinishingWallOrder(string typeName) {
+            return _wallTypesByOrder.IndexOf(typeName) + 1;
+        }
+
+        public int GetFinishingFloorOrder(string typeName) {
+            return _floorTypesByOrder.IndexOf(typeName) + 1;
+        }
+
+        public int GetFinishinCeilingOrder(string typeName) {
+            return _ceilingTypesByOrder.IndexOf(typeName) + 1;
         }
 
         private List<Element> GetBoundaryWalls() {

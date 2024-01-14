@@ -8,7 +8,6 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 
 using dosymep.Bim4Everyone;
-using dosymep.Bim4Everyone.ProjectParams;
 using dosymep.Revit;
 
 using pyRevitLabs.Json.Linq;
@@ -25,7 +24,6 @@ namespace RevitRoomFinishing.Models
         public Element Element => _revitElement;
 
         public List<RoomElement> Rooms { get; set; }
-        public int FinishingNumber => Rooms.First().GetFinishingOrder(_revitElement.Name);
 
         private string GetRoomsStrParameters(string parameterName) {
             IEnumerable<string> values = Rooms
@@ -65,15 +63,15 @@ namespace RevitRoomFinishing.Models
 
             if(_revitElement.Category.Id == Category.GetCategory(_revitElement.Document, BuiltInCategory.OST_Walls).Id) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", FinishingNumber);
+                _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", Rooms.First().GetFinishingWallOrder(_revitElement.Name));
             }
             else if(_revitElement.Category.Id == Category.GetCategory(_revitElement.Document, BuiltInCategory.OST_Floors).Id) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", FinishingNumber);
+                _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", Rooms.First().GetFinishingFloorOrder(_revitElement.Name));
             } 
             else {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", FinishingNumber);
+                _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", Rooms.First().GetFinishinCeilingOrder(_revitElement.Name));
             }
             
             _revitElement.SetParamValue("ФОП_РАЗМ_Площадь", _revitElement.GetParamValue<double>("Площадь"));
