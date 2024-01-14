@@ -12,19 +12,40 @@ using dosymep.Revit;
 namespace RevitRoomFinishing.Models
 {
     class RoomElement {
-        Room _room;
+        private readonly Room _room;
+        private readonly List<Element> _walls;
+        private readonly List<Element> _floors;
+        private readonly List<Element> _ceilings;
+        private List<string> _wallTypes;
+
 
         public RoomElement(Room room) {
             _room = room;
+            _walls = GetBoundaryWalls();
+            _floors = GetFloors();
+            _ceilings = GetCeilings();
+
+            CalculateFinishingOrder();
         }
 
         public Room RevitRoom => _room;
+        public List<Element> Walls => _walls;
+        public List<Element> Floors => _floors;
+        public List<Element> Ceilings => _ceilings;
 
         public void CalculateFinishingOrder() {
-
+            _wallTypes = _walls
+                    .Select(x => x.Name)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
         }
 
-        public List<Element> GetBoundaryWalls() {
+        public int GetFinishingOrder(string typeName) {
+            return _wallTypes.IndexOf(typeName) + 1;
+        }
+
+        private List<Element> GetBoundaryWalls() {
             ElementId wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
             return _room.GetBoundarySegments(SpatialElementExtensions.DefaultBoundaryOptions)

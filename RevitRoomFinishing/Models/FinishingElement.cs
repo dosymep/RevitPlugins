@@ -17,7 +17,7 @@ namespace RevitRoomFinishing.Models
 {
     class FinishingElement
     {
-        private Element _revitElement;
+        private readonly Element _revitElement;
         
         public FinishingElement(Element element) {
             _revitElement = element;
@@ -25,7 +25,7 @@ namespace RevitRoomFinishing.Models
         public Element Element => _revitElement;
 
         public List<RoomElement> Rooms { get; set; }
-        public int FinishingNumber { get; set; }
+        public int FinishingNumber => Rooms.First().GetFinishingOrder(_revitElement.Name);
 
         private string GetRoomsStrParameters(string parameterName) {
             IEnumerable<string> values = Rooms

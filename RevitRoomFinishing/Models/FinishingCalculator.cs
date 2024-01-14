@@ -38,7 +38,7 @@ namespace RevitRoomFinishing.Models
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
             foreach(var room in finishingRooms) {
-                var finishings = room.GetBoundaryWalls();
+                var finishings = room.Walls;
                 foreach(var finishingRevitElement in finishings) {
                     ElementId finishingElementId = finishingRevitElement.Id;
                     if(allFinishings.TryGetValue(finishingElementId, out FinishingElement elementInDict)) {
