@@ -44,18 +44,20 @@ namespace RevitRoomFinishing.Models {
             return new ObservableCollection<ElementsGroupViewModel>(rooms);
         }
 
-        public bool CheckIsElementOnPhase(Element element, Phase phase) {
-            int phaseStatus = (int) element.GetPhaseStatus(phase.Id);
-            if(phaseStatus > 1 && phaseStatus < 6) {
-                return true;
-            }
-            return false;
-        }
+        public ObservableCollection<ElementsGroupViewModel> GetElementTypesOnPhase(BuiltInCategory category, Phase phase) {
+            ICollection<ElementOnPhaseStatus> phaseStatuses = new Collection<ElementOnPhaseStatus>() {
+                ElementOnPhaseStatus.Existing,
+                ElementOnPhaseStatus.Demolished,
+                ElementOnPhaseStatus.New,
+                ElementOnPhaseStatus.Temporary
+            };
 
-        public ObservableCollection<ElementsGroupViewModel> GetFinishingTypes(BuiltInCategory category) {
+            ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, phaseStatuses);
+
             var finishingTypes = new FilteredElementCollector(Document)
                 .OfCategory(category)
                 .WhereElementIsNotElementType()
+                .WherePasses(phaseFilter)
                 .Select(x => Document.GetElement(x.GetTypeId()))
                 .GroupBy(x => x.Name)
                 .Select(x => new ElementsGroupViewModel(x.Key, x))

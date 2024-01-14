@@ -33,10 +33,6 @@ namespace RevitRoomFinishing.ViewModels {
             _revitRepository = revitRepository;
 
             _phases = _revitRepository.GetPhases();
-            _wallTypes = _revitRepository.GetFinishingTypes(BuiltInCategory.OST_Walls);
-            _floorTypes = _revitRepository.GetFinishingTypes(BuiltInCategory.OST_Floors);
-            _ceilingTypes = _revitRepository.GetFinishingTypes(BuiltInCategory.OST_Ceilings);
-
             SelectedPhase = _phases[_phases.Count - 1];
 
             CalculateFinishingCommand = RelayCommand.Create(CalculateFinishing, CanCalculateFinishing);
@@ -51,7 +47,13 @@ namespace RevitRoomFinishing.ViewModels {
             set {
                 this.RaiseAndSetIfChanged(ref _selectedPhase, value);
                 _rooms = _revitRepository.GetRoomsOnPhase(_selectedPhase);
+                _wallTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Walls, _selectedPhase);
+                _floorTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Floors, _selectedPhase);
+                _ceilingTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Ceilings, _selectedPhase);
                 OnPropertyChanged("Rooms");
+                OnPropertyChanged("WallTypes");
+                OnPropertyChanged("FloorTypes");
+                OnPropertyChanged("CeilingTypes");
             }
         }
 
