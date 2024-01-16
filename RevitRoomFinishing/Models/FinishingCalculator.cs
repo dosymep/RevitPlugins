@@ -47,18 +47,18 @@ namespace RevitRoomFinishing.Models
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
             foreach(var room in finishingRooms) {
-                var finishings = room.Walls.Where(x => _selectedFinishings.Contains(x.Name));
+                var finishings = room.AllFinishing.Where(x => _selectedFinishings.Contains(x.Name));
                 foreach(var finishingRevitElement in finishings) {
                     ElementId finishingElementId = finishingRevitElement.Id;
                     if(allFinishings.TryGetValue(finishingElementId, out FinishingElement elementInDict)) {
                         elementInDict.Rooms.Add(room);
                     } 
                     else {
-                        var newWall = new FinishingElement(finishingRevitElement) {
+                        var newFinishing = new FinishingElement(finishingRevitElement) {
                             Rooms = new List<RoomElement> { room }
                         };
 
-                        allFinishings.Add(finishingElementId, newWall);
+                        allFinishings.Add(finishingElementId, newFinishing);
                     }
                 }
             }

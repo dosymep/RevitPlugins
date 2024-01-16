@@ -31,7 +31,11 @@ namespace RevitRoomFinishing.Models
             _ceilings = GetCeilings();
             _baseboards = GetBaseboards();
 
-            _allFinishing = new List<Element>();
+            _allFinishing = _walls
+                .Concat(_floors)
+                .Concat(_ceilings)
+                .Concat(_baseboards)
+                .ToList();
 
             _wallTypesByOrder = CalculateFinishingOrder(_walls);
             _floorTypesByOrder = CalculateFinishingOrder(_floors);
