@@ -17,7 +17,7 @@ namespace RevitRoomFinishing.Models
         private readonly List<Element> _floors;
         private readonly List<Element> _ceilings;
         private readonly List<Element> _baseboards;
-        private readonly List<Element> _allFinishing;
+        private readonly IReadOnlyCollection<Element> _allFinishing;
         private List<string> _wallTypesByOrder;
         private List<string> _floorTypesByOrder;
         private List<string> _ceilingTypesByOrder;
@@ -48,10 +48,10 @@ namespace RevitRoomFinishing.Models
         public List<Element> Floors => _floors;
         public List<Element> Ceilings => _ceilings;
         public List<Element> Baseboards => _baseboards;
-        public List<Element> AllFinishing => _allFinishing;
+        public IReadOnlyCollection<Element> AllFinishing => _allFinishing;
 
 
-        private List<string> CalculateFinishingOrder(List<Element> roomElements) {
+        private List<string> CalculateFinishingOrder(IReadOnlyCollection<Element> roomElements) {
             return roomElements
                 .Select(x => x.Name)
                 .Distinct()

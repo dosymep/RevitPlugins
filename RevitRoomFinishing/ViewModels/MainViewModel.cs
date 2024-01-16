@@ -18,17 +18,17 @@ namespace RevitRoomFinishing.ViewModels {
         private readonly PluginConfig _pluginConfig;
         private readonly RevitRepository _revitRepository;
 
-        private List<Phase> _phases;
+        private readonly List<Phase> _phases;
         private Phase _selectedPhase;
-
+                
+        private readonly ICollection<ElementId> _walls;
+        private readonly ICollection<ElementId> _floors;
+        private readonly ICollection<ElementId> _ceilings;
+                
         private ObservableCollection<ElementsGroupViewModel> _rooms;
         private ObservableCollection<ElementsGroupViewModel> _wallTypes;
         private ObservableCollection<ElementsGroupViewModel> _floorTypes;
         private ObservableCollection<ElementsGroupViewModel> _ceilingTypes;
-
-        private ICollection<ElementId> _walls;
-        private ICollection<ElementId> _floors;
-        private ICollection<ElementId> _ceilings;
 
         private string _errorText;
 
@@ -40,24 +40,23 @@ namespace RevitRoomFinishing.ViewModels {
             _floors = _revitRepository.GetFinishingElements(BuiltInCategory.OST_Floors, "(АР)");
             _ceilings = _revitRepository.GetFinishingElements(BuiltInCategory.OST_Ceilings, "(О) Потолок");            
 
-            _phases = _revitRepository.GetPhases();
+            _phases = _revitRepository.GetPhases(); 
             SelectedPhase = _phases[_phases.Count - 1];
 
             CalculateFinishingCommand = RelayCommand.Create(CalculateFinishing, CanCalculateFinishing);
         }
+        public ICommand CalculateFinishingCommand { get; }
 
         public List<Phase> Phases => _phases;
-
-        public ICommand CalculateFinishingCommand { get; }
 
         public Phase SelectedPhase {
             get => _selectedPhase;
             set {
                 this.RaiseAndSetIfChanged(ref _selectedPhase, value);
                 _rooms = _revitRepository.GetRoomsOnPhase(_selectedPhase);
-                _wallTypes = _revitRepository.GetElementTypesOnPhase(_walls, _selectedPhase);
-                _floorTypes = _revitRepository.GetElementTypesOnPhase(_floors, _selectedPhase);
-                _ceilingTypes = _revitRepository.GetElementTypesOnPhase(_ceilings, _selectedPhase);
+                _wallTypes = _revitRepository.GetFinishingGroupsByPhase(_walls, _selectedPhase);
+                _floorTypes = _revitRepository.GetFinishingGroupsByPhase(_floors, _selectedPhase);
+                _ceilingTypes = _revitRepository.GetFinishingGroupsByPhase(_ceilings, _selectedPhase);
                 OnPropertyChanged("Rooms");
                 OnPropertyChanged("WallTypes");
                 OnPropertyChanged("FloorTypes");
@@ -109,6 +108,10 @@ namespace RevitRoomFinishing.ViewModels {
             }
             if(!Rooms.Any(x => x.IsChecked)) {
                 ErrorText = "Помещения не выбраны";
+                return false;
+            }
+            if(!WallTypes.Any(w => w.IsChecked) && !FloorTypes.Any(f => f.IsChecked) && !CeilingTypes.Any(c => c.IsChecked)) {
+                ErrorText = "Отделка не выбрана";
                 return false;
             }
 

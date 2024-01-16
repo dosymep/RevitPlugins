@@ -18,8 +18,17 @@ using RevitRoomFinishing.ViewModels;
 
 namespace RevitRoomFinishing.Models {
     internal class RevitRepository {
+        private readonly ICollection<ElementOnPhaseStatus> _phaseStatuses;
+
         public RevitRepository(UIApplication uiApplication) {
             UIApplication = uiApplication;
+
+            _phaseStatuses = new Collection<ElementOnPhaseStatus>() {
+                ElementOnPhaseStatus.Existing,
+                ElementOnPhaseStatus.Demolished,
+                ElementOnPhaseStatus.New,
+                ElementOnPhaseStatus.Temporary
+            };
         }
 
         public UIApplication UIApplication { get; }
@@ -70,21 +79,14 @@ namespace RevitRoomFinishing.Models {
                 .ToElementIds();
             }
 
-        public ObservableCollection<ElementsGroupViewModel> GetElementTypesOnPhase(ICollection<ElementId> elements, Phase phase) {
-            ICollection<ElementOnPhaseStatus> phaseStatuses = new Collection<ElementOnPhaseStatus>() {
-                ElementOnPhaseStatus.Existing,
-                ElementOnPhaseStatus.Demolished,
-                ElementOnPhaseStatus.New,
-                ElementOnPhaseStatus.Temporary
-            };            
-
-            ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, phaseStatuses);
+        public ObservableCollection<ElementsGroupViewModel> GetFinishingGroupsByPhase(ICollection<ElementId> elements, Phase phase) {
+            ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, _phaseStatuses);
 
             var finishingTypes = new FilteredElementCollector(Document, elements)
                 .WherePasses(phaseFilter)
-                .Select(x => Document.GetElement(x.GetTypeId()))
                 .GroupBy(x => x.Name)
                 .Select(x => new ElementsGroupViewModel(x.Key, x))
+                .OrderBy(x => x.Name)
                 .ToList();
 
             return new ObservableCollection<ElementsGroupViewModel>(finishingTypes);
