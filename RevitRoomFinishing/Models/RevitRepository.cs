@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web.Security;
+using System.Xml.Linq;
 
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB;
@@ -44,19 +45,42 @@ namespace RevitRoomFinishing.Models {
             return new ObservableCollection<ElementsGroupViewModel>(rooms);
         }
 
-        public ObservableCollection<ElementsGroupViewModel> GetElementTypesOnPhase(BuiltInCategory category, Phase phase) {
+        public ICollection<ElementId> GetFinishingElements(BuiltInCategory category, params string[] typeNames) {
+            ElementId parameterId = new ElementId(BuiltInParameter.ELEM_TYPE_PARAM);
+            ParameterValueProvider valueProvider = new ParameterValueProvider(parameterId);
+            FilterStringContains ruleEvaluator = new FilterStringContains();
+
+            IList<ElementFilter> filters = new List<ElementFilter>();
+            foreach(string name in typeNames) {
+            #if REVIT_2021_OR_LESS
+                FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, name, false);
+            #else
+                FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, name);
+            #endif
+                ElementParameterFilter parameterFilter = new ElementParameterFilter(rule);
+                filters.Add(parameterFilter);
+            }
+
+            LogicalOrFilter orFilter = new LogicalOrFilter(filters);
+
+            return new FilteredElementCollector(Document)
+                .OfCategory(category)
+                .WhereElementIsNotElementType()
+                .WherePasses(orFilter)
+                .ToElementIds();
+            }
+
+        public ObservableCollection<ElementsGroupViewModel> GetElementTypesOnPhase(ICollection<ElementId> elements, Phase phase) {
             ICollection<ElementOnPhaseStatus> phaseStatuses = new Collection<ElementOnPhaseStatus>() {
                 ElementOnPhaseStatus.Existing,
                 ElementOnPhaseStatus.Demolished,
                 ElementOnPhaseStatus.New,
                 ElementOnPhaseStatus.Temporary
-            };
+            };            
 
             ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, phaseStatuses);
 
-            var finishingTypes = new FilteredElementCollector(Document)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
+            var finishingTypes = new FilteredElementCollector(Document, elements)
                 .WherePasses(phaseFilter)
                 .Select(x => Document.GetElement(x.GetTypeId()))
                 .GroupBy(x => x.Name)

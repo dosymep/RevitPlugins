@@ -26,11 +26,19 @@ namespace RevitRoomFinishing.ViewModels {
         private ObservableCollection<ElementsGroupViewModel> _floorTypes;
         private ObservableCollection<ElementsGroupViewModel> _ceilingTypes;
 
+        private ICollection<ElementId> _walls;
+        private ICollection<ElementId> _floors;
+        private ICollection<ElementId> _ceilings;
+
         private string _errorText;
 
         public MainViewModel(PluginConfig pluginConfig, RevitRepository revitRepository) {
             _pluginConfig = pluginConfig;
             _revitRepository = revitRepository;
+
+            _walls = _revitRepository.GetFinishingElements(BuiltInCategory.OST_Walls, "(О) Стена", "(О) Плинтус");
+            _floors = _revitRepository.GetFinishingElements(BuiltInCategory.OST_Floors, "(АР)");
+            _ceilings = _revitRepository.GetFinishingElements(BuiltInCategory.OST_Ceilings, "(О) Потолок");            
 
             _phases = _revitRepository.GetPhases();
             SelectedPhase = _phases[_phases.Count - 1];
@@ -47,9 +55,9 @@ namespace RevitRoomFinishing.ViewModels {
             set {
                 this.RaiseAndSetIfChanged(ref _selectedPhase, value);
                 _rooms = _revitRepository.GetRoomsOnPhase(_selectedPhase);
-                _wallTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Walls, _selectedPhase);
-                _floorTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Floors, _selectedPhase);
-                _ceilingTypes = _revitRepository.GetElementTypesOnPhase(BuiltInCategory.OST_Ceilings, _selectedPhase);
+                _wallTypes = _revitRepository.GetElementTypesOnPhase(_walls, _selectedPhase);
+                _floorTypes = _revitRepository.GetElementTypesOnPhase(_floors, _selectedPhase);
+                _ceilingTypes = _revitRepository.GetElementTypesOnPhase(_ceilings, _selectedPhase);
                 OnPropertyChanged("Rooms");
                 OnPropertyChanged("WallTypes");
                 OnPropertyChanged("FloorTypes");
