@@ -60,12 +60,19 @@ namespace RevitRoomFinishing.Models
             _revitElement.SetParamValue("ФОП_ОТД_Имя помещения", GetRoomsStrParameters("Имя"));
             _revitElement.SetParamValue("ФОП_ОТД_Номер помещения", GetRoomsStrParameters("Номер"));
             _revitElement.SetParamValue("ФОП_ОТД_Тип отделки_ТЕ", GetRoomsKeyParameters("ОТД_Тип отделки"));
+            
+            _revitElement.SetParamValue("ФОП_РАЗМ_Площадь", _revitElement.GetParamValue<double>("Площадь"));
+            _revitElement.SetParamValue("ФОП_РАЗМ_Объем", _revitElement.GetParamValue<double>("Объем"));
 
-            if(_revitElement.Category.Id == Category.GetCategory(_revitElement.Document, BuiltInCategory.OST_Walls).Id) {
+            if(_revitElement.Name.Contains("(О) Стена")) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", Rooms.First().GetFinishingWallOrder(_revitElement.Name));
             }
-            else if(_revitElement.Category.Id == Category.GetCategory(_revitElement.Document, BuiltInCategory.OST_Floors).Id) {
+            else if(_revitElement.Name.Contains("(О) Плинтус")) {
+                _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
+                _revitElement.SetParamValue("ФОП_ОТД_Тип плинтуса_ДЕ", Rooms.First().GetFinishinBaseboardsOrder(_revitElement.Name));
+            } 
+            else if(_revitElement.Name.Contains("(АР)")) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", Rooms.First().GetFinishingFloorOrder(_revitElement.Name));
             } 
@@ -73,9 +80,6 @@ namespace RevitRoomFinishing.Models
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", Rooms.First().GetFinishinCeilingOrder(_revitElement.Name));
             }
-            
-            _revitElement.SetParamValue("ФОП_РАЗМ_Площадь", _revitElement.GetParamValue<double>("Площадь"));
-            _revitElement.SetParamValue("ФОП_РАЗМ_Объем", _revitElement.GetParamValue<double>("Объем"));
         }
     }
 }

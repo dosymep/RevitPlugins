@@ -16,9 +16,12 @@ namespace RevitRoomFinishing.Models
         private readonly List<Element> _walls;
         private readonly List<Element> _floors;
         private readonly List<Element> _ceilings;
+        private readonly List<Element> _baseboards;
+        private readonly List<Element> _allFinishing;
         private List<string> _wallTypesByOrder;
         private List<string> _floorTypesByOrder;
         private List<string> _ceilingTypesByOrder;
+        private List<string> _baseboardTypesByOrder;
 
 
         public RoomElement(Room room) {
@@ -26,16 +29,23 @@ namespace RevitRoomFinishing.Models
             _walls = GetBoundaryWalls();
             _floors = GetFloors();
             _ceilings = GetCeilings();
+            _baseboards = GetBaseboards();
+
+            _allFinishing = new List<Element>();
 
             _wallTypesByOrder = CalculateFinishingOrder(_walls);
             _floorTypesByOrder = CalculateFinishingOrder(_floors);
             _ceilingTypesByOrder = CalculateFinishingOrder(_ceilings);
+            _baseboardTypesByOrder = CalculateFinishingOrder(_ceilings);
         }
 
         public Room RevitRoom => _room;
         public List<Element> Walls => _walls;
         public List<Element> Floors => _floors;
         public List<Element> Ceilings => _ceilings;
+        public List<Element> Baseboards => _baseboards;
+        public List<Element> AllFinishing => _allFinishing;
+
 
         private List<string> CalculateFinishingOrder(List<Element> roomElements) {
             return roomElements
@@ -57,6 +67,10 @@ namespace RevitRoomFinishing.Models
             return _ceilingTypesByOrder.IndexOf(typeName) + 1;
         }
 
+        public int GetFinishinBaseboardsOrder(string typeName) {
+            return _baseboardTypesByOrder.IndexOf(typeName) + 1;
+        }
+
         private List<Element> GetBoundaryWalls() {
             ElementId wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
 
@@ -74,6 +88,10 @@ namespace RevitRoomFinishing.Models
         }
 
         public List<Element> GetCeilings() {
+            return new List<Element>();
+        }
+
+        public List<Element> GetBaseboards() {
             return new List<Element>();
         }
     }

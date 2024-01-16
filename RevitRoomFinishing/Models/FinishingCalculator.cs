@@ -16,13 +16,22 @@ namespace RevitRoomFinishing.Models
     {
         private readonly List<FinishingElement> _finishings;
         private readonly List<ElementsGroupViewModel> _rooms;
+        private readonly List<string> _selectedFinishings;
 
-        public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames) {
+        public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames, IEnumerable<ElementsGroupViewModel> finishingTypes) {
             _rooms = roomNames.ToList();
+            _selectedFinishings = GetSelectedFinishing(finishingTypes);
             _finishings = SetRoomsForFinishing();
         }
 
         public List<FinishingElement> Finishings => _finishings;
+
+        private List<string> GetSelectedFinishing(IEnumerable<ElementsGroupViewModel> finishingTypes) {
+            return finishingTypes
+                .Where(x => x.IsChecked)
+                .Select(x => x.Name)
+                .ToList();
+        }
 
         private List<FinishingElement> SetRoomsForFinishing() {
             List<Element> selectedRooms = _rooms
@@ -38,7 +47,7 @@ namespace RevitRoomFinishing.Models
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
             foreach(var room in finishingRooms) {
-                var finishings = room.Walls;
+                var finishings = room.Walls.Where(x => _selectedFinishings.Contains(x.Name));
                 foreach(var finishingRevitElement in finishings) {
                     ElementId finishingElementId = finishingRevitElement.Id;
                     if(allFinishings.TryGetValue(finishingElementId, out FinishingElement elementInDict)) {

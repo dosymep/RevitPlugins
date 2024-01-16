@@ -86,7 +86,12 @@ namespace RevitRoomFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
-            FinishingCalculator calculator = new FinishingCalculator(Rooms);
+            List<ElementsGroupViewModel> allFinishings = WallTypes
+                .Concat(CeilingTypes)
+                .Concat(FloorTypes)
+                .ToList();
+                
+            FinishingCalculator calculator = new FinishingCalculator(Rooms, allFinishings);
             List<FinishingElement> finishings = calculator.Finishings;
 
             using(Transaction t = _revitRepository.Document.StartTransaction("Заполнить параметры отделки")) {
