@@ -27,7 +27,7 @@ namespace RevitRoomFinishing.Models
 
         private string GetRoomsStrParameters(string parameterName) {
             IEnumerable<string> values = Rooms
-                .Select(x => x.RevitRoom.GetParamValueOrDefault(parameterName, "123"))
+                .Select(x => x.RevitRoom.GetParamValue<string>(parameterName))
                 .Distinct();
 
             return string.Join("; ", values);
@@ -57,8 +57,10 @@ namespace RevitRoomFinishing.Models
             _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 9", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 9"));
             _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 10", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 10"));
             _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 1", GetRoomsStrParameters("ФОП_ОТД_Плинтусы Тип 1"));
+
             _revitElement.SetParamValue("ФОП_ОТД_Имя помещения", GetRoomsStrParameters("Имя"));
             _revitElement.SetParamValue("ФОП_ОТД_Номер помещения", GetRoomsStrParameters("Номер"));
+
             _revitElement.SetParamValue("ФОП_ОТД_Тип отделки_ТЕ", GetRoomsKeyParameters("ОТД_Тип отделки"));
             
             _revitElement.SetParamValue("ФОП_РАЗМ_Площадь", _revitElement.GetParamValue<double>("Площадь"));

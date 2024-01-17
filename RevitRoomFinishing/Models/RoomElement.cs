@@ -12,24 +12,31 @@ using dosymep.Revit;
 namespace RevitRoomFinishing.Models
 {
     class RoomElement {
-        private readonly Room _room;
-        private readonly List<Element> _walls;
-        private readonly List<Element> _floors;
-        private readonly List<Element> _ceilings;
-        private readonly List<Element> _baseboards;
+        private readonly Room _revitRoom;
+        private readonly Document _document;
+        private readonly ElementIntersectsSolidFilter _solidFilter;
+
         private readonly IReadOnlyCollection<Element> _allFinishing;
-        private List<string> _wallTypesByOrder;
-        private List<string> _floorTypesByOrder;
-        private List<string> _ceilingTypesByOrder;
-        private List<string> _baseboardTypesByOrder;
+
+        private readonly List<string> _wallTypesByOrder;
+        private readonly List<string> _floorTypesByOrder;
+        private readonly List<string> _ceilingTypesByOrder;
+        private readonly List<string> _baseboardTypesByOrder;
 
 
         public RoomElement(Room room) {
-            _room = room;
-            _walls = GetBoundaryWalls();
-            _floors = GetFloors();
-            _ceilings = GetCeilings();
-            _baseboards = GetBaseboards();
+            _revitRoom = room;
+            _document = room.Document;
+            Solid roomSolid = room
+                .ClosedShell
+                .OfType<Solid>()
+                .First();
+            _solidFilter = new ElementIntersectsSolidFilter(roomSolid);
+
+            IList<Element> _walls = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls);
+            IList<Element> _floors = GetElementsBySolidIntersection(BuiltInCategory.OST_Floors);
+            IList<Element> _ceilings = GetElementsBySolidIntersection(BuiltInCategory.OST_Ceilings);
+            IList<Element> _baseboards = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls);
 
             _allFinishing = _walls
                 .Concat(_floors)
@@ -43,16 +50,11 @@ namespace RevitRoomFinishing.Models
             _baseboardTypesByOrder = CalculateFinishingOrder(_ceilings);
         }
 
-        public Room RevitRoom => _room;
-        public List<Element> Walls => _walls;
-        public List<Element> Floors => _floors;
-        public List<Element> Ceilings => _ceilings;
-        public List<Element> Baseboards => _baseboards;
+        public Room RevitRoom => _revitRoom;
         public IReadOnlyCollection<Element> AllFinishing => _allFinishing;
 
-
-        private List<string> CalculateFinishingOrder(IReadOnlyCollection<Element> roomElements) {
-            return roomElements
+        private List<string> CalculateFinishingOrder(IList<Element> finishingElements) {
+            return finishingElements
                 .Select(x => x.Name)
                 .Distinct()
                 .OrderBy(x => x)
@@ -75,28 +77,12 @@ namespace RevitRoomFinishing.Models
             return _baseboardTypesByOrder.IndexOf(typeName) + 1;
         }
 
-        private List<Element> GetBoundaryWalls() {
-            ElementId wallCategoryId = new ElementId(BuiltInCategory.OST_Walls);
-
-            return _room.GetBoundarySegments(SpatialElementExtensions.DefaultBoundaryOptions)
-                .SelectMany(x => x)
-                .Select(x => x.ElementId)
-                .Where(x => x.IsNotNull())
-                .Select(x => _room.Document.GetElement(x))
-                .Where(x => x.Category?.Id == wallCategoryId)
-                .ToList();
-        }
-
-        public List<Element> GetFloors() {
-            return new List<Element>();
-        }
-
-        public List<Element> GetCeilings() {
-            return new List<Element>();
-        }
-
-        public List<Element> GetBaseboards() {
-            return new List<Element>();
+        private IList<Element> GetElementsBySolidIntersection(BuiltInCategory category) {
+            return new FilteredElementCollector(_document)
+               .OfCategory(category)
+               .WhereElementIsNotElementType()
+               .WherePasses(_solidFilter)
+               .ToElements();
         }
     }
 }
