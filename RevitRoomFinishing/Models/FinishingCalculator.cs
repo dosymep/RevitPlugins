@@ -16,20 +16,21 @@ namespace RevitRoomFinishing.Models
     {
         private readonly List<FinishingElement> _finishings;
         private readonly List<ElementsGroupViewModel> _rooms;
-        private readonly List<string> _selectedFinishings;
+        private readonly List<ElementId> _selectedFinishingElements;
 
         public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames, IEnumerable<ElementsGroupViewModel> finishingTypes) {
             _rooms = roomNames.ToList();
-            _selectedFinishings = GetSelectedFinishing(finishingTypes);
+            _selectedFinishingElements = GetSelectedFinishingElements(finishingTypes);
             _finishings = SetRoomsForFinishing();
         }
 
         public List<FinishingElement> Finishings => _finishings;
 
-        private List<string> GetSelectedFinishing(IEnumerable<ElementsGroupViewModel> finishingTypes) {
+        private List<ElementId> GetSelectedFinishingElements(IEnumerable<ElementsGroupViewModel> finishingTypes) {
             return finishingTypes
                 .Where(x => x.IsChecked)
-                .Select(x => x.Name)
+                .SelectMany(x => x.Elements)
+                .Select(x => x.Id)
                 .ToList();
         }
 
@@ -41,14 +42,13 @@ namespace RevitRoomFinishing.Models
 
             List<RoomElement> finishingRooms = selectedRooms
                 .OfType<Room>()
-                .Select(x => new RoomElement(x))
+                .Select(x => new RoomElement(x, _selectedFinishingElements))
                 .ToList();
 
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
             foreach(var room in finishingRooms) {
-                var finishings = room.AllFinishing.Where(x => _selectedFinishings.Contains(x.Name));
-                foreach(var finishingRevitElement in finishings) {
+                foreach(var finishingRevitElement in room.AllFinishing) {
                     ElementId finishingElementId = finishingRevitElement.Id;
                     if(allFinishings.TryGetValue(finishingElementId, out FinishingElement elementInDict)) {
                         elementInDict.Rooms.Add(room);

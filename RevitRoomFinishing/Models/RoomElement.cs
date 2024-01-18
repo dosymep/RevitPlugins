@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 
 using dosymep.Revit;
+using dosymep.Revit.Geometry;
 
 namespace RevitRoomFinishing.Models
 {
@@ -15,6 +17,7 @@ namespace RevitRoomFinishing.Models
         private readonly Room _revitRoom;
         private readonly Document _document;
         private readonly ElementIntersectsSolidFilter _solidFilter;
+        private readonly BoundingBoxIntersectsFilter _bbFilter;
 
         private readonly IReadOnlyCollection<Element> _allFinishing;
 
@@ -23,15 +26,24 @@ namespace RevitRoomFinishing.Models
         private readonly List<string> _ceilingTypesByOrder;
         private readonly List<string> _baseboardTypesByOrder;
 
+        private readonly List<ElementId> _elements;
 
-        public RoomElement(Room room) {
+
+        public RoomElement(Room room, List<ElementId> elements) {
             _revitRoom = room;
+            _elements = elements;
+
             _document = room.Document;
             Solid roomSolid = room
                 .ClosedShell
                 .OfType<Solid>()
                 .First();
             _solidFilter = new ElementIntersectsSolidFilter(roomSolid);
+
+            BoundingBoxXYZ bbXYZ = roomSolid.GetBoundingBox();
+            BoundingBoxXYZ transformedBB = bbXYZ.TransformBoundingBox(bbXYZ.Transform);
+            Outline roomOutline = new Outline(transformedBB.Min, transformedBB.Max);
+                _bbFilter = new BoundingBoxIntersectsFilter(roomOutline);
 
             IList<Element> _walls = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls);
             IList<Element> _floors = GetElementsBySolidIntersection(BuiltInCategory.OST_Floors);
@@ -78,9 +90,10 @@ namespace RevitRoomFinishing.Models
         }
 
         private IList<Element> GetElementsBySolidIntersection(BuiltInCategory category) {
-            return new FilteredElementCollector(_document)
+            return new FilteredElementCollector(_document, _elements)
                .OfCategory(category)
                .WhereElementIsNotElementType()
+               .WherePasses(_bbFilter)
                .WherePasses(_solidFilter)
                .ToElements();
         }
