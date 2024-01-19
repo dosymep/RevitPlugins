@@ -9,59 +9,62 @@ using Autodesk.Revit.DB;
 
 using RevitRoomFinishing.ViewModels;
 using System.Web.Security;
+using dosymep.Bim4Everyone;
+using dosymep.Revit;
 
 namespace RevitRoomFinishing.Models
 {
     class FinishingCalculator
     {
+        private readonly List<Element> _revitRooms;
+        private readonly List<Element> _revitFinishings;
         private readonly List<FinishingElement> _finishings;
-        private readonly List<ElementsGroupViewModel> _rooms;
-        private readonly List<ElementId> _selectedFinishingElements;
 
         public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames, IEnumerable<ElementsGroupViewModel> finishingTypes) {
-            _rooms = roomNames.ToList();
-            _selectedFinishingElements = GetSelectedFinishingElements(finishingTypes);
+            _revitRooms = roomNames
+                .Where(x => x.IsChecked)
+                .SelectMany(x => x.Elements)
+                .ToList();
+
+            _revitFinishings = finishingTypes
+                .Where(x => x.IsChecked)
+                .SelectMany(x => x.Elements)
+                .ToList();
+
             _finishings = SetRoomsForFinishing();
         }
 
         public List<FinishingElement> Finishings => _finishings;
 
-        private List<ElementId> GetSelectedFinishingElements(IEnumerable<ElementsGroupViewModel> finishingTypes) {
-            return finishingTypes
-                .Where(x => x.IsChecked)
-                .SelectMany(x => x.Elements)
-                .Select(x => x.Id)
+        public List<Element> CheckFinishingByRoomBounding() {
+            return _revitFinishings
+                .Where(x => x.GetParamValue<bool>(BuiltInParameter.WALL_ATTR_ROOM_BOUNDING))
+                .ToList();
+        }
+
+        public List<Element> CheckRoomsByKeyParameter(string paramName) {
+            return _revitRooms
+                .Where(x => string.IsNullOrEmpty(x.GetParam(paramName).AsValueString()))
+                .ToList();
+        }
+
+        public List<Element> CheckRoomsByParameter(string paramName) {
+            return _revitRooms
+                .Where(x => x.GetParam(paramName) == null)
                 .ToList();
         }
 
         public List<Element> CheckFinishingByRoom() {
             return _finishings
-                .Where(x => x.CheckFinishingTypes())
+                .Where(x => !x.CheckFinishingTypes())
                 .Select(x => x.RevitElement)
                 .ToList();
         }
 
-        public List<Element> CheckFinishingByRoomBounding() {
-            return new List<Element>();
-        }
-
-        public List<Element> CheckRoomsByKey() {
-            return new List<Element>();
-        }
-
-        public List<Element> CheckRoomsByParameters() {
-            return new List<Element>();
-        }
-
-        private List<FinishingElement> SetRoomsForFinishing() {
-            List<Element> selectedRooms = _rooms
-                .Where(x => x.IsChecked)
-                .SelectMany(x => x.Elements)
-                .ToList();
-
-            List<RoomElement> finishingRooms = selectedRooms
+        private List<FinishingElement> SetRoomsForFinishing() {    
+            List<RoomElement> finishingRooms = _revitRooms
                 .OfType<Room>()
-                .Select(x => new RoomElement(x, _selectedFinishingElements))
+                .Select(x => new RoomElement(x, _revitFinishings))
                 .ToList();
 
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();

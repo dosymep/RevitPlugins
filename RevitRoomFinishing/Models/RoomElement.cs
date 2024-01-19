@@ -28,9 +28,9 @@ namespace RevitRoomFinishing.Models
 
         private readonly List<ElementId> _elements;
         
-        public RoomElement(Room room, List<ElementId> elements) {
+        public RoomElement(Room room, List<Element> elements) {
             _revitRoom = room;
-            _elements = elements;
+            _elements = elements.Select(x => x.Id).ToList();
 
             _document = room.Document;
             Solid roomSolid = room
