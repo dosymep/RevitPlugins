@@ -93,6 +93,8 @@ namespace RevitRoomFinishing.ViewModels {
             FinishingCalculator calculator = new FinishingCalculator(Rooms, allFinishings);
             List<FinishingElement> finishings = calculator.Finishings;
 
+            List<Element> errors = calculator.CheckFinishingByRoom();
+
             using(Transaction t = _revitRepository.Document.StartTransaction("Заполнить параметры отделки")) {
                 foreach(var element in finishings) {
                     element.UpdateFinishingParameters();

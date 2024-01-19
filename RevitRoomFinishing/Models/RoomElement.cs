@@ -27,8 +27,7 @@ namespace RevitRoomFinishing.Models
         private readonly List<string> _baseboardTypesByOrder;
 
         private readonly List<ElementId> _elements;
-
-
+        
         public RoomElement(Room room, List<ElementId> elements) {
             _revitRoom = room;
             _elements = elements;

@@ -21,7 +21,7 @@ namespace RevitRoomFinishing.Models
         public FinishingElement(Element element) {
             _revitElement = element;
         }
-        public Element Element => _revitElement;
+        public Element RevitElement => _revitElement;
 
         public List<RoomElement> Rooms { get; set; }
 
@@ -39,6 +39,19 @@ namespace RevitRoomFinishing.Models
                 .Distinct();
 
             return string.Join("; ", values);
+        }
+
+        public bool CheckFinishingTypes() {
+            List<string> finishingTypes = Rooms
+                .Select(x => x.RevitRoom)
+                //.Select(x => x.GetParamValueString("ОТД_Тип отделки"))
+                .Select(x => x.GetParam("ОТД_Тип отделки").AsValueString())
+                .Distinct()
+                .ToList();
+
+            if(finishingTypes.Count == 1)
+                return true;
+            return false;
         }
 
         public void UpdateFinishingParameters() {

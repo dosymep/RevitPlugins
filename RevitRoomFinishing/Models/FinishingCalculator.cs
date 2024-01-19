@@ -34,6 +34,25 @@ namespace RevitRoomFinishing.Models
                 .ToList();
         }
 
+        public List<Element> CheckFinishingByRoom() {
+            return _finishings
+                .Where(x => x.CheckFinishingTypes())
+                .Select(x => x.RevitElement)
+                .ToList();
+        }
+
+        public List<Element> CheckFinishingByRoomBounding() {
+            return new List<Element>();
+        }
+
+        public List<Element> CheckRoomsByKey() {
+            return new List<Element>();
+        }
+
+        public List<Element> CheckRoomsByParameters() {
+            return new List<Element>();
+        }
+
         private List<FinishingElement> SetRoomsForFinishing() {
             List<Element> selectedRooms = _rooms
                 .Where(x => x.IsChecked)
