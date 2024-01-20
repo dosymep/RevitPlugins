@@ -12,6 +12,7 @@ using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
 using RevitRoomFinishing.Models;
+using RevitRoomFinishing.Views;
 
 namespace RevitRoomFinishing.ViewModels {
     internal class MainViewModel : BaseViewModel {
@@ -84,6 +85,8 @@ namespace RevitRoomFinishing.ViewModels {
             set => this.RaiseAndSetIfChanged(ref _ceilingTypes, value);
         }
 
+
+
         private void CalculateFinishing() {
             List<ElementsGroupViewModel> allFinishings = WallTypes
                 .Concat(CeilingTypes)
@@ -91,10 +94,27 @@ namespace RevitRoomFinishing.ViewModels {
                 .ToList();
                 
             FinishingCalculator calculator = new FinishingCalculator(Rooms, allFinishings);
+
+            if(calculator.ErrorElements.Any()) {
+                var window = new ErrorsInfoWindow() {
+                    DataContext = new ErrorsViewModel() {
+                        Elements = new ObservableCollection<ErrorElementInfo>(calculator.ErrorElements)
+                    }
+                };
+                window.Show();
+                return;
+            }
+
+            if(calculator.WarningElements.Any()) {
+                var window = new ErrorsInfoWindow() {
+                    DataContext = new ErrorsViewModel() {
+                        Elements = new ObservableCollection<ErrorElementInfo>(calculator.WarningElements)
+                    }
+                };
+                window.Show();
+            }
+
             List<FinishingElement> finishings = calculator.Finishings;
-
-            List<Element> errors = calculator.CheckFinishingByRoom();
-
             using(Transaction t = _revitRepository.Document.StartTransaction("Заполнить параметры отделки")) {
                 foreach(var element in finishings) {
                     element.UpdateFinishingParameters();
