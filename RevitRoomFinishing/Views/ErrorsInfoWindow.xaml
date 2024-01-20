@@ -1,0 +1,47 @@
+﻿<Window 
+    x:Class="RevitRoomFinishing.Views.ErrorsInfoWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+    xmlns:base="clr-namespace:dosymep.WPF.Views"
+    xmlns:local="clr-namespace:RevitRoomFinishing.Views"
+    xmlns:vms="clr-namespace:RevitRoomFinishing.ViewModels"
+        
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner"
+    
+    Title="MainWindow"
+    Height="600" Width="50"
+    MinHeight="600" MinWidth="500"
+
+    d:DataContext="{d:DesignInstance vms:ErrorsViewModel, IsDesignTimeCreatable=False}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ListView
+            Margin="10"
+            ItemsSource="{Binding Elements}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        Header="Категория"
+                        Width="180"
+                        DisplayMemberBinding="{Binding CategoryName}"/>
+                    <GridViewColumn
+                        Header="Имя"
+                        Width="200"
+                        DisplayMemberBinding="{Binding ElementName}"/>
+                    <GridViewColumn
+                        Header="ID"
+                        Width="120"
+                        DisplayMemberBinding="{Binding ElementId}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>    
+</Window>
