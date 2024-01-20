@@ -17,12 +17,14 @@ namespace RevitRoomFinishing.Models
     class FinishingElement
     {
         private readonly Element _revitElement;
+        private readonly FinishingCalculator _calculator;
         
-        public FinishingElement(Element element) {
+        public FinishingElement(Element element, FinishingCalculator calculator) {
             _revitElement = element;
+            _calculator = calculator;
         }
-        public Element RevitElement => _revitElement;
 
+        public Element RevitElement => _revitElement;
         public List<RoomElement> Rooms { get; set; }
 
         private string GetRoomsStrParameters(string parameterName) {
@@ -55,6 +57,8 @@ namespace RevitRoomFinishing.Models
         }
 
         public void UpdateFinishingParameters() {
+            FinishingType finishingType = _calculator.RoomsByFinishingType[Rooms.First().RoomFinishingType];
+
             _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 1", GetRoomsStrParameters("ФОП_ОТД_Полы Тип 1"));
             _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 2", GetRoomsStrParameters("ФОП_ОТД_Полы Тип 2"));
             _revitElement.SetParamValue("ФОП_ОТД_Потолки Тип 1", GetRoomsStrParameters("ФОП_ОТД_Потолки Тип 1"));
@@ -70,6 +74,7 @@ namespace RevitRoomFinishing.Models
             _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 9", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 9"));
             _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 10", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 10"));
             _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 1", GetRoomsStrParameters("ФОП_ОТД_Плинтусы Тип 1"));
+            _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 2", GetRoomsStrParameters("ФОП_ОТД_Плинтусы Тип 2"));
 
             _revitElement.SetParamValue("ФОП_ОТД_Имя помещения", GetRoomsStrParameters("Имя"));
             _revitElement.SetParamValue("ФОП_ОТД_Номер помещения", GetRoomsStrParameters("Номер"));
@@ -81,19 +86,19 @@ namespace RevitRoomFinishing.Models
 
             if(_revitElement.Name.Contains("(О) Стена")) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", Rooms.First().GetFinishingWallOrder(_revitElement.Name));
+                _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", finishingType.GetWallOrder(_revitElement.Name));
             }
             else if(_revitElement.Name.Contains("(О) Плинтус")) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип плинтуса_ДЕ", Rooms.First().GetFinishinBaseboardsOrder(_revitElement.Name));
+                _revitElement.SetParamValue("ФОП_ОТД_Тип плинтуса_ДЕ", finishingType.GetBaseboardOrder(_revitElement.Name));
             } 
             else if(_revitElement.Name.Contains("(АР)")) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", Rooms.First().GetFinishingFloorOrder(_revitElement.Name));
+                _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", finishingType.GetFloorOrder(_revitElement.Name));
             } 
             else {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
-                _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", Rooms.First().GetFinishinCeilingOrder(_revitElement.Name));
+                _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", finishingType.GetCeilingOrder(_revitElement.Name));
             }
         }
     }

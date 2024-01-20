@@ -20,6 +20,7 @@ namespace RevitRoomFinishing.Models
         private readonly List<FinishingElement> _finishings;
         private readonly List<ErrorElementInfo> _errorElements;
         private readonly List<ErrorElementInfo> _warningElements;
+        private Dictionary<string, FinishingType> _roomsByFinishingType;
 
         public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames, IEnumerable<ElementsGroupViewModel> finishingTypes) {
             _revitRooms = roomNames
@@ -34,6 +35,7 @@ namespace RevitRoomFinishing.Models
 
             _errorElements = new List<ErrorElementInfo>();
             _warningElements = new List<ErrorElementInfo>();
+
             _errorElements.AddRange(CheckFinishingByRoomBounding().Select(x => new ErrorElementInfo(x)));
             _errorElements.AddRange(CheckRoomsByKeyParameter("ОТД_Тип отделки").Select(x => new ErrorElementInfo(x)));
 
@@ -47,6 +49,7 @@ namespace RevitRoomFinishing.Models
         }
 
         public List<FinishingElement> Finishings => _finishings;
+        public Dictionary<string, FinishingType> RoomsByFinishingType => _roomsByFinishingType;
         public List<ErrorElementInfo> ErrorElements => _errorElements;
         public List<ErrorElementInfo> WarningElements => _warningElements;
 
@@ -90,7 +93,7 @@ namespace RevitRoomFinishing.Models
                         elementInDict.Rooms.Add(room);
                     } 
                     else {
-                        var newFinishing = new FinishingElement(finishingRevitElement) {
+                        var newFinishing = new FinishingElement(finishingRevitElement, this) {
                             Rooms = new List<RoomElement> { room }
                         };
 
@@ -98,6 +101,10 @@ namespace RevitRoomFinishing.Models
                     }
                 }
             }
+
+            _roomsByFinishingType = finishingRooms
+                .GroupBy(x => x.RoomFinishingType)
+                .ToDictionary(x => x.Key, x => new FinishingType(x.ToList()));
 
             return allFinishings.Values.ToList();
         }

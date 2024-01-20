@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+using Autodesk.AdvanceSteel.Modelling;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 
@@ -15,22 +16,24 @@ namespace RevitRoomFinishing.Models
 {
     class RoomElement {
         private readonly Room _revitRoom;
+        private readonly string _roomFinishingType;
         private readonly Document _document;
         private readonly ElementIntersectsSolidFilter _solidFilter;
         private readonly BoundingBoxIntersectsFilter _bbFilter;
 
         private readonly IReadOnlyCollection<Element> _allFinishing;
 
-        private readonly List<string> _wallTypesByOrder;
-        private readonly List<string> _floorTypesByOrder;
-        private readonly List<string> _ceilingTypesByOrder;
-        private readonly List<string> _baseboardTypesByOrder;
+        private readonly IReadOnlyCollection<Element> _walls;
+        private readonly IReadOnlyCollection<Element> _floors;
+        private readonly IReadOnlyCollection<Element> _ceilings;
+        private readonly IReadOnlyCollection<Element> _baseboards;
 
-        private readonly List<ElementId> _elements;
+        private readonly List<ElementId> _selectedFinishingElements;
         
-        public RoomElement(Room room, List<Element> elements) {
+        public RoomElement(Room room, List<Element> selectedElements) {
             _revitRoom = room;
-            _elements = elements.Select(x => x.Id).ToList();
+            _roomFinishingType = _revitRoom.GetParam("ОТД_Тип отделки").AsValueString();
+            _selectedFinishingElements = selectedElements.Select(x => x.Id).ToList();
 
             _document = room.Document;
             Solid roomSolid = room
@@ -44,52 +47,29 @@ namespace RevitRoomFinishing.Models
             Outline roomOutline = new Outline(transformedBB.Min, transformedBB.Max);
                 _bbFilter = new BoundingBoxIntersectsFilter(roomOutline);
 
-            IList<Element> _walls = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls);
-            IList<Element> _floors = GetElementsBySolidIntersection(BuiltInCategory.OST_Floors);
-            IList<Element> _ceilings = GetElementsBySolidIntersection(BuiltInCategory.OST_Ceilings);
-            IList<Element> _baseboards = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls);
+            _walls = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls).ToList();
+            _floors = GetElementsBySolidIntersection(BuiltInCategory.OST_Floors).ToList();
+            _ceilings = GetElementsBySolidIntersection(BuiltInCategory.OST_Ceilings).ToList();
+            _baseboards = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls).ToList();
 
             _allFinishing = _walls
                 .Concat(_floors)
                 .Concat(_ceilings)
                 .Concat(_baseboards)
                 .ToList();
-
-            _wallTypesByOrder = CalculateFinishingOrder(_walls);
-            _floorTypesByOrder = CalculateFinishingOrder(_floors);
-            _ceilingTypesByOrder = CalculateFinishingOrder(_ceilings);
-            _baseboardTypesByOrder = CalculateFinishingOrder(_ceilings);
         }
 
         public Room RevitRoom => _revitRoom;
+        public string RoomFinishingType => _roomFinishingType;
+
         public IReadOnlyCollection<Element> AllFinishing => _allFinishing;
-
-        private List<string> CalculateFinishingOrder(IList<Element> finishingElements) {
-            return finishingElements
-                .Select(x => x.Name)
-                .Distinct()
-                .OrderBy(x => x)
-                .ToList();
-        }
-
-        public int GetFinishingWallOrder(string typeName) {
-            return _wallTypesByOrder.IndexOf(typeName) + 1;
-        }
-
-        public int GetFinishingFloorOrder(string typeName) {
-            return _floorTypesByOrder.IndexOf(typeName) + 1;
-        }
-
-        public int GetFinishinCeilingOrder(string typeName) {
-            return _ceilingTypesByOrder.IndexOf(typeName) + 1;
-        }
-
-        public int GetFinishinBaseboardsOrder(string typeName) {
-            return _baseboardTypesByOrder.IndexOf(typeName) + 1;
-        }
+        public IReadOnlyCollection<Element> Walls => _walls;
+        public IReadOnlyCollection<Element> Floors => _floors;
+        public IReadOnlyCollection<Element> Ceilings => _ceilings;
+        public IReadOnlyCollection<Element> Baseboards => _baseboards;
 
         private IList<Element> GetElementsBySolidIntersection(BuiltInCategory category) {
-            return new FilteredElementCollector(_document, _elements)
+            return new FilteredElementCollector(_document, _selectedFinishingElements)
                .OfCategory(category)
                .WhereElementIsNotElementType()
                .WherePasses(_bbFilter)
