@@ -22,16 +22,9 @@ namespace RevitRoomFinishing.Models
         private readonly List<ErrorElementInfo> _warningElements;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
 
-        public FinishingCalculator(IEnumerable<ElementsGroupViewModel> roomNames, IEnumerable<ElementsGroupViewModel> finishingTypes) {
-            _revitRooms = roomNames
-                .Where(x => x.IsChecked)
-                .SelectMany(x => x.Elements)
-                .ToList();
-
-            _revitFinishings = finishingTypes
-                .Where(x => x.IsChecked)
-                .SelectMany(x => x.Elements)
-                .ToList();
+        public FinishingCalculator(IEnumerable<Element> rooms, IEnumerable<Element> finishings) {
+            _revitRooms = rooms.ToList();
+            _revitFinishings = finishings.ToList();
 
             _errorElements = new List<ErrorElementInfo>();
             _warningElements = new List<ErrorElementInfo>();

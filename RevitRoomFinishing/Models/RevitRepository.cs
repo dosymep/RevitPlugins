@@ -37,6 +37,10 @@ namespace RevitRoomFinishing.Models {
         public Application Application => UIApplication.Application;
         public Document Document => ActiveUIDocument.Document;
 
+        public List<Phase> GetPhases() {
+            return Document.Phases.OfType<Phase>().ToList();
+        }
+
         public ObservableCollection<ElementsGroupViewModel> GetRoomsOnPhase(Phase phase) {
             ParameterValueProvider valueProvider = new ParameterValueProvider(new ElementId(BuiltInParameter.ROOM_PHASE));
             FilterNumericEquals ruleEvaluator = new FilterNumericEquals();
@@ -54,46 +58,25 @@ namespace RevitRoomFinishing.Models {
             return new ObservableCollection<ElementsGroupViewModel>(rooms);
         }
 
-        public ICollection<ElementId> GetFinishingElements(BuiltInCategory category, params string[] typeNames) {
+        public ICollection<Element> GetFinishingElementsOnPhase(BuiltInCategory category, Phase phase, string typeKey) {
+            ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, _phaseStatuses);
+
             ElementId parameterId = new ElementId(BuiltInParameter.ELEM_TYPE_PARAM);
             ParameterValueProvider valueProvider = new ParameterValueProvider(parameterId);
             FilterStringContains ruleEvaluator = new FilterStringContains();
-
-            IList<ElementFilter> filters = new List<ElementFilter>();
-            foreach(string name in typeNames) {
-            #if REVIT_2021_OR_LESS
-                FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, name, false);
-            #else
-                FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, name);
-            #endif
-                ElementParameterFilter parameterFilter = new ElementParameterFilter(rule);
-                filters.Add(parameterFilter);
-            }
-
-            LogicalOrFilter orFilter = new LogicalOrFilter(filters);
+        #if REVIT_2021_OR_LESS
+            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, typeKey, false);
+        #else
+            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, typeKey);
+        #endif
+            ElementParameterFilter parameterFilter = new ElementParameterFilter(rule);
 
             return new FilteredElementCollector(Document)
                 .OfCategory(category)
                 .WhereElementIsNotElementType()
-                .WherePasses(orFilter)
-                .ToElementIds();
-            }
-
-        public ObservableCollection<ElementsGroupViewModel> GetFinishingGroupsByPhase(ICollection<ElementId> elements, Phase phase) {
-            ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, _phaseStatuses);
-
-            var finishingTypes = new FilteredElementCollector(Document, elements)
+                .WherePasses(parameterFilter)
                 .WherePasses(phaseFilter)
-                .GroupBy(x => x.Name)
-                .Select(x => new ElementsGroupViewModel(x.Key, x))
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            return new ObservableCollection<ElementsGroupViewModel>(finishingTypes);
-        }
-
-        public List<Phase> GetPhases() {
-            return Document.Phases.OfType<Phase>().ToList();
+                .ToElements();
         }
     }
 }

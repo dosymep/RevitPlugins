@@ -28,12 +28,12 @@ namespace RevitRoomFinishing.Models
         private readonly IReadOnlyCollection<Element> _ceilings;
         private readonly IReadOnlyCollection<Element> _baseboards;
 
-        private readonly List<ElementId> _selectedFinishingElements;
+        private readonly List<ElementId> allFinishingElements;
         
         public RoomElement(Room room, List<Element> selectedElements) {
             _revitRoom = room;
             _roomFinishingType = _revitRoom.GetParam("ОТД_Тип отделки").AsValueString();
-            _selectedFinishingElements = selectedElements.Select(x => x.Id).ToList();
+            allFinishingElements = selectedElements.Select(x => x.Id).ToList();
 
             _document = room.Document;
             Solid roomSolid = room
@@ -69,7 +69,7 @@ namespace RevitRoomFinishing.Models
         public IReadOnlyCollection<Element> Baseboards => _baseboards;
 
         private IList<Element> GetElementsBySolidIntersection(BuiltInCategory category) {
-            return new FilteredElementCollector(_document, _selectedFinishingElements)
+            return new FilteredElementCollector(_document, allFinishingElements)
                .OfCategory(category)
                .WhereElementIsNotElementType()
                .WherePasses(_bbFilter)

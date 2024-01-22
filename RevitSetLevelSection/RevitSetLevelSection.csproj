@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <Import Project="..\ProjectProps\Common.props" />
     <Import Project="..\ProjectProps\DevExpress.props" />
+    <ItemGroup>
+      <ProjectReference Include="..\RevitShakeSpecs\RevitShakeSpecs.csproj" />
+    </ItemGroup>
     
     <ItemGroup>
         <Resource Include="Resources\icons8-error-96.png" />
