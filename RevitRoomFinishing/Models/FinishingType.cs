@@ -27,7 +27,7 @@ namespace RevitRoomFinishing.Models {
             _wallTypesByOrder = CalculateFinishingOrder(_walls);
             _floorTypesByOrder = CalculateFinishingOrder(_floors);
             _ceilingTypesByOrder = CalculateFinishingOrder(_ceilings);
-            _baseboardTypesByOrder = CalculateFinishingOrder(_ceilings);
+            _baseboardTypesByOrder = CalculateFinishingOrder(_baseboards);
         }
 
         public int GetWallOrder(string typeName) {

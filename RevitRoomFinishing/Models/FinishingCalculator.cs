@@ -16,15 +16,15 @@ namespace RevitRoomFinishing.Models
     class FinishingCalculator
     {
         private readonly List<Element> _revitRooms;
-        private readonly List<Element> _revitFinishings;
+        private readonly Finishing _revitFinishings;
         private readonly List<FinishingElement> _finishings;
         private readonly List<ErrorElementInfo> _errorElements;
         private readonly List<ErrorElementInfo> _warningElements;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
 
-        public FinishingCalculator(IEnumerable<Element> rooms, IEnumerable<Element> finishings) {
+        public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings) {
             _revitRooms = rooms.ToList();
-            _revitFinishings = finishings.ToList();
+            _revitFinishings = finishings;
 
             _errorElements = new List<ErrorElementInfo>();
             _warningElements = new List<ErrorElementInfo>();
@@ -48,6 +48,7 @@ namespace RevitRoomFinishing.Models
 
         public List<Element> CheckFinishingByRoomBounding() {
             return _revitFinishings
+                .AllFinishings
                 .Where(x => x.GetParamValueOrDefault(BuiltInParameter.WALL_ATTR_ROOM_BOUNDING, 0) == 1)
                 .ToList();
         }

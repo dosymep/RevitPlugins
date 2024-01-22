@@ -27,15 +27,12 @@ namespace RevitRoomFinishing.Models
         private readonly IReadOnlyCollection<Element> _floors;
         private readonly IReadOnlyCollection<Element> _ceilings;
         private readonly IReadOnlyCollection<Element> _baseboards;
-
-        private readonly List<ElementId> allFinishingElements;
-        
-        public RoomElement(Room room, List<Element> selectedElements) {
+       
+        public RoomElement(Room room, Finishing finishingElements) {
             _revitRoom = room;
-            _roomFinishingType = _revitRoom.GetParam("ОТД_Тип отделки").AsValueString();
-            allFinishingElements = selectedElements.Select(x => x.Id).ToList();
-
             _document = room.Document;
+            _roomFinishingType = _revitRoom.GetParam("ОТД_Тип отделки").AsValueString();
+
             Solid roomSolid = room
                 .ClosedShell
                 .OfType<Solid>()
@@ -47,10 +44,10 @@ namespace RevitRoomFinishing.Models
             Outline roomOutline = new Outline(transformedBB.Min, transformedBB.Max);
                 _bbFilter = new BoundingBoxIntersectsFilter(roomOutline);
 
-            _walls = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls).ToList();
-            _floors = GetElementsBySolidIntersection(BuiltInCategory.OST_Floors).ToList();
-            _ceilings = GetElementsBySolidIntersection(BuiltInCategory.OST_Ceilings).ToList();
-            _baseboards = GetElementsBySolidIntersection(BuiltInCategory.OST_Walls).ToList();
+            _walls = GetElementsBySolidIntersection(finishingElements.Walls.Select(x => x.Id).ToList()).ToList();
+            _floors = GetElementsBySolidIntersection(finishingElements.Floors.Select(x => x.Id).ToList()).ToList();
+            _ceilings = GetElementsBySolidIntersection(finishingElements.Ceilings.Select(x => x.Id).ToList()).ToList();
+            _baseboards = GetElementsBySolidIntersection(finishingElements.Baseboards.Select(x => x.Id).ToList()).ToList();
 
             _allFinishing = _walls
                 .Concat(_floors)
@@ -68,10 +65,12 @@ namespace RevitRoomFinishing.Models
         public IReadOnlyCollection<Element> Ceilings => _ceilings;
         public IReadOnlyCollection<Element> Baseboards => _baseboards;
 
-        private IList<Element> GetElementsBySolidIntersection(BuiltInCategory category) {
-            return new FilteredElementCollector(_document, allFinishingElements)
-               .OfCategory(category)
-               .WhereElementIsNotElementType()
+        private IList<Element> GetElementsBySolidIntersection(ICollection<ElementId> elements) {
+            if(elements.Count == 0) {
+                return new List<Element> ();
+            }
+
+            return new FilteredElementCollector(_document, elements)
                .WherePasses(_bbFilter)
                .WherePasses(_solidFilter)
                .ToElements();

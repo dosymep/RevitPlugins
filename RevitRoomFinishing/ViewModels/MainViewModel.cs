@@ -54,21 +54,18 @@ namespace RevitRoomFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
-            ICollection<Element> walls = _revitRepository.GetFinishingElementsOnPhase(BuiltInCategory.OST_Walls, SelectedPhase, "(О) Стена");
-            ICollection<Element> baseboards = _revitRepository.GetFinishingElementsOnPhase(BuiltInCategory.OST_Walls, SelectedPhase, "(О) Плинтус");
-            ICollection<Element> floors = _revitRepository.GetFinishingElementsOnPhase(BuiltInCategory.OST_Floors, SelectedPhase, "(АР) ");
-            ICollection<Element> ceilings = _revitRepository.GetFinishingElementsOnPhase(BuiltInCategory.OST_Ceilings, SelectedPhase, "(О) Потолок");
-
-            IEnumerable<Element> finishingElements = walls
-                .Concat(baseboards)
-                .Concat(floors)
-                .Concat(ceilings);
+            Finishing finishing = new Finishing() {
+                Walls = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Walls, SelectedPhase),
+                Floors = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Floors, SelectedPhase),
+                Ceilings = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Ceilings, SelectedPhase),
+                Baseboards = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Baseboards, SelectedPhase)
+            };
 
             IEnumerable<Element> selectedRooms = Rooms
                 .Where(x => x.IsChecked)
                 .SelectMany(x => x.Elements);
 
-            FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishingElements);
+            FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishing);
 
             if(calculator.ErrorElements.Any()) {
                 var window = new ErrorsInfoWindow() {

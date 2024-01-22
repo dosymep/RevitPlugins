@@ -84,15 +84,15 @@ namespace RevitRoomFinishing.Models
             _revitElement.SetParamValue("ФОП_РАЗМ_Площадь", _revitElement.GetParamValue<double>("Площадь"));
             _revitElement.SetParamValue("ФОП_РАЗМ_Объем", _revitElement.GetParamValue<double>("Объем"));
 
-            if(_revitElement.Name.Contains("(О) Стена")) {
+            if(_revitElement.Name.Contains(FinishingCategory.Walls.KeyWord)) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип стены_ДЕ", finishingType.GetWallOrder(_revitElement.Name));
             }
-            else if(_revitElement.Name.Contains("(О) Плинтус")) {
+            else if(_revitElement.Name.Contains(FinishingCategory.Baseboards.KeyWord)) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Длина"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип плинтуса_ДЕ", finishingType.GetBaseboardOrder(_revitElement.Name));
             } 
-            else if(_revitElement.Name.Contains("(АР)")) {
+            else if(_revitElement.Name.Contains(FinishingCategory.Floors.KeyWord)) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", finishingType.GetFloorOrder(_revitElement.Name));
             } 

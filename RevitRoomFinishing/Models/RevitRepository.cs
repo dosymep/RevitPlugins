@@ -58,21 +58,21 @@ namespace RevitRoomFinishing.Models {
             return new ObservableCollection<ElementsGroupViewModel>(rooms);
         }
 
-        public ICollection<Element> GetFinishingElementsOnPhase(BuiltInCategory category, Phase phase, string typeKey) {
+        public ICollection<Element> GetFinishingElementsOnPhase(FinishingCategory finishingCategory, Phase phase) {
             ElementPhaseStatusFilter phaseFilter = new ElementPhaseStatusFilter(phase.Id, _phaseStatuses);
 
             ElementId parameterId = new ElementId(BuiltInParameter.ELEM_TYPE_PARAM);
             ParameterValueProvider valueProvider = new ParameterValueProvider(parameterId);
             FilterStringContains ruleEvaluator = new FilterStringContains();
-        #if REVIT_2021_OR_LESS
-            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, typeKey, false);
-        #else
-            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, typeKey);
+#if REVIT_2021_OR_LESS
+            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, finishingCategory.KeyWord, false);
+#else
+            FilterStringRule rule = new FilterStringRule(valueProvider, ruleEvaluator, finishingCategory.KeyWord);
         #endif
             ElementParameterFilter parameterFilter = new ElementParameterFilter(rule);
 
             return new FilteredElementCollector(Document)
-                .OfCategory(category)
+                .OfCategory(finishingCategory.Category)
                 .WhereElementIsNotElementType()
                 .WherePasses(parameterFilter)
                 .WherePasses(phaseFilter)

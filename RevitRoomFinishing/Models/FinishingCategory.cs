@@ -12,25 +12,25 @@ namespace RevitRoomFinishing.Models {
         public string KeyWord { get; set; }
         public BuiltInCategory Category { get; set; }
 
-        public static FinishingCategory WallsFinishing { get; } = new FinishingCategory() {
+        public static FinishingCategory Walls { get; } = new FinishingCategory() {
             Name = "Стены",
             KeyWord = "(О) Стена",
             Category = BuiltInCategory.OST_Walls
         };
 
-        public static FinishingCategory BaseboardsFinishing { get; } = new FinishingCategory() {
+        public static FinishingCategory Baseboards { get; } = new FinishingCategory() {
             Name = "Плинтусы",
             KeyWord = "(О) Плинтус",
             Category = BuiltInCategory.OST_Walls
         };
 
-        public static FinishingCategory FloorsFinishing { get; } = new FinishingCategory() {
+        public static FinishingCategory Floors { get; } = new FinishingCategory() {
             Name = "Перекрытия",
             KeyWord = "(АР)",
             Category = BuiltInCategory.OST_Walls
         };
 
-        public static FinishingCategory CeilingsFinishing { get; } = new FinishingCategory() {
+        public static FinishingCategory Ceilings { get; } = new FinishingCategory() {
             Name = "Потолки",
             KeyWord = "(О) Потолок",
             Category = BuiltInCategory.OST_Walls
