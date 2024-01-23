@@ -53,6 +53,7 @@ namespace RevitRoomFinishing.Models {
                 .OfType<Room>()
                 .GroupBy(x => x.GetParamValueOrDefault(BuiltInParameter.ROOM_NAME, "<Без имени>"))
                 .Select(x => new ElementsGroupViewModel(x.Key.ToString(), x))
+                .OrderBy(x => x.Name)
                 .ToList();
 
             return new ObservableCollection<ElementsGroupViewModel>(rooms);

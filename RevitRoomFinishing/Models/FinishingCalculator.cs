@@ -20,20 +20,24 @@ namespace RevitRoomFinishing.Models
         private readonly Finishing _revitFinishings;
         private readonly List<FinishingElement> _finishings;
 
+        private readonly string _phaseName;
+
         private readonly ErrorsViewModel _errors;
         private readonly ErrorsViewModel _warnings;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
 
-        public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings) {
+        public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings, Phase phase) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
+
+            _phaseName = phase.Name;
 
             _errors = new ErrorsViewModel();
             _warnings = new ErrorsViewModel();
 
             _errors.AddElements(new ErrorsListViewModel() {
                 Message = "Ошибка",
-                Description = "Экземпляры отделки не являются границами помещений",
+                Description = "Экземпляры отделки являются границами помещений",
                 Elements = new ObservableCollection<ErrorElement>(CheckFinishingByRoomBounding())
             });
             _errors.AddElements(new ErrorsListViewModel() {
@@ -75,21 +79,21 @@ namespace RevitRoomFinishing.Models
             return _revitFinishings
                 .AllFinishings
                 .Where(x => x.GetParamValueOrDefault(BuiltInParameter.WALL_ATTR_ROOM_BOUNDING, 0) == 1)
-                .Select(x => new ErrorElement(x))
+                .Select(x => new ErrorElement(x, _phaseName))
                 .ToList();
         }
 
         private List<ErrorElement> CheckRoomsByKeyParameter(string paramName) {
             return _revitRooms
                 .Where(x => x.GetParam(paramName).AsElementId() == ElementId.InvalidElementId)
-                .Select(x => new ErrorElement(x))
+                .Select(x => new ErrorElement(x, _phaseName))
                 .ToList();
         }
 
         private List<ErrorElement> CheckRoomsByParameter(string paramName) {
             return _revitRooms
                 .Where(x => string.IsNullOrEmpty(x.GetParamValue<string>(paramName)))
-                .Select(x => new ErrorElement(x))
+                .Select(x => new ErrorElement(x, _phaseName))
                 .ToList();
         }
 
@@ -97,7 +101,7 @@ namespace RevitRoomFinishing.Models
             return _finishings
                 .Where(x => !x.CheckFinishingTypes())
                 .Select(x => x.RevitElement)
-                .Select(x => new ErrorElement(x))
+                .Select(x => new ErrorElement(x, _phaseName))
                 .ToList();
         }
 

@@ -65,7 +65,7 @@ namespace RevitRoomFinishing.ViewModels {
                 .Where(x => x.IsChecked)
                 .SelectMany(x => x.Elements);
 
-            FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishing);
+            FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishing, SelectedPhase);
 
             if(calculator.ErrorElements.ErrorLists.Any()) {
                 var window = new ErrorsInfoWindow() {
