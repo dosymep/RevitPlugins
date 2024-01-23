@@ -20,9 +20,6 @@ namespace RevitRoomFinishing.Models
         private readonly Finishing _revitFinishings;
         private readonly List<FinishingElement> _finishings;
 
-        //private readonly List<ErrorsListViewModel> _errorLists;
-        //private readonly List<ErrorsListViewModel> _warningLists;
-
         private readonly ErrorsViewModel _errors;
         private readonly ErrorsViewModel _warnings;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
@@ -30,9 +27,6 @@ namespace RevitRoomFinishing.Models
         public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
-
-            //_errorLists = new List<ErrorsListViewModel>();
-            //_warningLists = new List<ErrorsListViewModel>();
 
             _errors = new ErrorsViewModel();
             _warnings = new ErrorsViewModel();
@@ -73,8 +67,6 @@ namespace RevitRoomFinishing.Models
 
         public List<FinishingElement> Finishings => _finishings;
         public Dictionary<string, FinishingType> RoomsByFinishingType => _roomsByFinishingType;
-        //public List<ErrorsListViewModel> ErrorElements => _errorLists;
-        //public List<ErrorsListViewModel> WarningElements => _warningLists;     
         
         public ErrorsViewModel ErrorElements => _errors;
         public ErrorsViewModel WarningElements => _warnings;
