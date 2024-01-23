@@ -13,33 +13,65 @@
     WindowStartupLocation="CenterOwner"
     
     Title="MainWindow"
-    Height="600" Width="50"
-    MinHeight="600" MinWidth="500"
-
-    d:DataContext="{d:DesignInstance vms:ErrorsViewModel, IsDesignTimeCreatable=False}">
+    Height="500" Width="1000"
+    MinHeight="500" MinWidth="1000">
     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="0.6*"/>
+        </Grid.ColumnDefinitions>
+
         <ListView
+            Grid.Column="0"
             Margin="10"
+            ItemsSource="{Binding ErrorLists}"
+            SelectedItem="{Binding SelectedList}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        Header="Тип"
+                        Width="100"
+                        DisplayMemberBinding="{Binding Message}"/>
+                    <GridViewColumn
+                        Header="Описание"
+                        Width="280"
+                        DisplayMemberBinding="{Binding Description}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+        <ListView
+            Grid.Column="1"
+            Margin="10"
+            DataContext="{Binding SelectedList}"
             ItemsSource="{Binding Elements}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
+                        Header="ID"
+                        Width="100"
+                        DisplayMemberBinding="{Binding ElementId}"/>
+                    <GridViewColumn
                         Header="Категория"
-                        Width="180"
+                        Width="120"
                         DisplayMemberBinding="{Binding CategoryName}"/>
                     <GridViewColumn
-                        Header="Имя"
-                        Width="200"
+                        Header="Наименование"
+                        Width="120"
                         DisplayMemberBinding="{Binding ElementName}"/>
                     <GridViewColumn
-                        Header="ID"
+                        Header="Уровень"
                         Width="120"
-                        DisplayMemberBinding="{Binding ElementId}"/>
+                        DisplayMemberBinding="{Binding LevelName}"/>
+                    <GridViewColumn
+                        Header="Стадия"
+                        Width="120"
+                        DisplayMemberBinding="{Binding PhaseName}"/>
                 </GridView>
             </ListView.View>
         </ListView>

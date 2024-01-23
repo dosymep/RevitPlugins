@@ -69,8 +69,8 @@ namespace RevitRoomFinishing.ViewModels {
 
             if(calculator.ErrorElements.Any()) {
                 var window = new ErrorsInfoWindow() {
-                    DataContext = new ErrorsViewModel() {
-                        Elements = new ObservableCollection<ErrorElementInfo>(calculator.ErrorElements)
+                    DataContext = new ErrorsInfoViewModel() {
+                        ErrorLists = new ObservableCollection<ErrorsListViewModel>(calculator.ErrorElements)
                     }
                 };
                 window.Show();
@@ -79,8 +79,8 @@ namespace RevitRoomFinishing.ViewModels {
 
             if(calculator.WarningElements.Any()) {
                 var window = new ErrorsInfoWindow() {
-                    DataContext = new ErrorsViewModel() {
-                        Elements = new ObservableCollection<ErrorElementInfo>(calculator.WarningElements)
+                    DataContext = new ErrorsInfoViewModel() {
+                        ErrorLists = new ObservableCollection<ErrorsListViewModel>(calculator.WarningElements)
                     }
                 };
                 window.Show();

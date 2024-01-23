@@ -18,61 +18,87 @@ namespace RevitRoomFinishing.Models
         private readonly List<Element> _revitRooms;
         private readonly Finishing _revitFinishings;
         private readonly List<FinishingElement> _finishings;
-        private readonly List<ErrorElementInfo> _errorElements;
-        private readonly List<ErrorElementInfo> _warningElements;
+        private readonly List<ErrorsListViewModel> _errorLists;
+        private readonly List<ErrorsListViewModel> _warningLists;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
 
         public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
 
-            _errorElements = new List<ErrorElementInfo>();
-            _warningElements = new List<ErrorElementInfo>();
+            _errorLists = new List<ErrorsListViewModel>();
+            _warningLists = new List<ErrorsListViewModel>();
 
-            _errorElements.AddRange(CheckFinishingByRoomBounding().Select(x => new ErrorElementInfo(x)));
-            _errorElements.AddRange(CheckRoomsByKeyParameter("ОТД_Тип отделки").Select(x => new ErrorElementInfo(x)));
+            _errorLists.Add(new ErrorsListViewModel() {
+                Message = "Ошибка",
+                Description = "Ошибка в следующиих элементах",
+                Elements = new ObservableCollection<ErrorElement>(CheckFinishingByRoomBounding())
+            });
 
-            if(!_errorElements.Any()) {
+            _errorLists.Add(new ErrorsListViewModel() {
+                Message = "Ошибка",
+                Description = "Ошибка в следующиих элементах",
+                Elements = new ObservableCollection<ErrorElement>(CheckRoomsByKeyParameter("ОТД_Тип отделки"))
+            });
+
+            if(!_errorLists.Any()) {
                 _finishings = SetRoomsForFinishing();
-                _errorElements.AddRange(CheckFinishingByRoom().Select(x => new ErrorElementInfo(x)));
+                _errorLists.Add(new ErrorsListViewModel() {
+                    Message = "Ошибка",
+                    Description = "Ошибка в следующиих элементах",
+                    Elements = new ObservableCollection<ErrorElement>(CheckFinishingByRoom())
+                });
 
-                _warningElements.AddRange(CheckRoomsByParameter("Номер").Select(x => new ErrorElementInfo(x)));
-                _warningElements.AddRange(CheckRoomsByParameter("Имя").Select(x => new ErrorElementInfo(x)));
+                _warningLists.Add(new ErrorsListViewModel() {
+                    Message = "Предупреждение",
+                    Description = "Ошибка в следующиих элементах",
+                    Elements = new ObservableCollection<ErrorElement>(CheckRoomsByParameter("Номер"))
+                });
+
+                _warningLists.Add(new ErrorsListViewModel() {
+                    Message = "Предупреждение",
+                    Description = "Ошибка в следующиих элементах",
+                    Elements = new ObservableCollection<ErrorElement>(CheckRoomsByParameter("Имя"))
+                });
             }
         }
 
         public List<FinishingElement> Finishings => _finishings;
         public Dictionary<string, FinishingType> RoomsByFinishingType => _roomsByFinishingType;
-        public List<ErrorElementInfo> ErrorElements => _errorElements;
-        public List<ErrorElementInfo> WarningElements => _warningElements;
+        public List<ErrorsListViewModel> ErrorElements => _errorLists;
+        public List<ErrorsListViewModel> WarningElements => _warningLists;
 
-        public List<Element> CheckFinishingByRoomBounding() {
+        public List<ErrorElement> CheckFinishingByRoomBounding() {
             return _revitFinishings
                 .AllFinishings
                 .Where(x => x.GetParamValueOrDefault(BuiltInParameter.WALL_ATTR_ROOM_BOUNDING, 0) == 1)
+                .Select(x => new ErrorElement(x))
                 .ToList();
         }
 
-        public List<Element> CheckRoomsByKeyParameter(string paramName) {
+        private List<ErrorElement> CheckRoomsByKeyParameter(string paramName) {
             return _revitRooms
                 .Where(x => x.GetParam(paramName).AsElementId() == ElementId.InvalidElementId)
+                .Select(x => new ErrorElement(x))
                 .ToList();
         }
 
-        public List<Element> CheckRoomsByParameter(string paramName) {
+        private List<ErrorElement> CheckRoomsByParameter(string paramName) {
             return _revitRooms
                 .Where(x => x.GetParam(paramName) == null)
+                .Select(x => new ErrorElement(x))
                 .ToList();
         }
 
-        public List<Element> CheckFinishingByRoom() {
+        private List<ErrorElement> CheckFinishingByRoom() {
             return _finishings
                 .Where(x => !x.CheckFinishingTypes())
                 .Select(x => x.RevitElement)
+                .Select(x => new ErrorElement(x))
                 .ToList();
         }
 
-        public List<FinishingElement> SetRoomsForFinishing() {    
+        private List<FinishingElement> SetRoomsForFinishing() {    
             List<RoomElement> finishingRooms = _revitRooms
                 .OfType<Room>()
                 .Select(x => new RoomElement(x, _revitFinishings))
