@@ -79,5 +79,13 @@ namespace RevitRoomFinishing.Models {
                 .WherePasses(phaseFilter)
                 .ToElements();
         }
+
+        public void SetAll(IList<ElementsGroupViewModel> allLevels, bool value) {
+            foreach(var level in allLevels) { level.IsChecked = value; }
+        }
+
+        public void InvertAll(IList<ElementsGroupViewModel> allLevels) {
+            foreach(var level in allLevels) { level.IsChecked = !level.IsChecked; }
+        }
     }
 }

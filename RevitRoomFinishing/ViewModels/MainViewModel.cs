@@ -34,8 +34,14 @@ namespace RevitRoomFinishing.ViewModels {
             SelectedPhase = _phases[_phases.Count - 1];
 
             CalculateFinishingCommand = RelayCommand.Create(CalculateFinishing, CanCalculateFinishing);
+            CheckAllCommand = new RelayCommand(CheckAll);
+            UnCheckAllCommand = new RelayCommand(UnCheckAll);
+            InvertAllCommand = new RelayCommand(InvertAll);
         }
         public ICommand CalculateFinishingCommand { get; }
+        public ICommand CheckAllCommand { get; }
+        public ICommand UnCheckAllCommand { get; }
+        public ICommand InvertAllCommand { get; }
 
         public List<Phase> Phases => _phases;
 
@@ -103,6 +109,18 @@ namespace RevitRoomFinishing.ViewModels {
 
             ErrorText = null;
             return true;
+        }
+
+        private void CheckAll(object p) {
+            _revitRepository.SetAll(Rooms, true);
+        }
+
+        private void UnCheckAll(object p) {
+            _revitRepository.SetAll(Rooms, false);
+        }
+
+        private void InvertAll(object p) {
+            _revitRepository.InvertAll(Rooms);
         }
 
         public string ErrorText {

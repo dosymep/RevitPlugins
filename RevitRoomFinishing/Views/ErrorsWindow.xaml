@@ -22,8 +22,8 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.4*"/>
-            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="0.35*"/>
+            <ColumnDefinition Width="0.65*"/>
         </Grid.ColumnDefinitions>
 
         <ListView
@@ -39,8 +39,15 @@
                         DisplayMemberBinding="{Binding Message}"/>
                     <GridViewColumn
                         Header="Описание"
-                        Width="260"
-                        DisplayMemberBinding="{Binding Description}"/>
+                        Width="210">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    TextWrapping="Wrap"
+                                    Text="{Binding Description}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>                        
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -54,23 +61,23 @@
                 <GridView>
                     <GridViewColumn
                         Header="ID"
-                        Width="100"
+                        Width="70"
                         DisplayMemberBinding="{Binding ElementId}"/>
                     <GridViewColumn
                         Header="Категория"
-                        Width="120"
+                        Width="90"
                         DisplayMemberBinding="{Binding CategoryName}"/>
                     <GridViewColumn
                         Header="Наименование"
-                        Width="120"
+                        Width="160"
                         DisplayMemberBinding="{Binding ElementName}"/>
                     <GridViewColumn
                         Header="Уровень"
-                        Width="120"
+                        Width="160"
                         DisplayMemberBinding="{Binding LevelName}"/>
                     <GridViewColumn
                         Header="Стадия"
-                        Width="120"
+                        Width="150"
                         DisplayMemberBinding="{Binding PhaseName}"/>
                 </GridView>
             </ListView.View>

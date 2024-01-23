@@ -34,7 +34,6 @@ namespace RevitRoomFinishing.ViewModels {
                 .Document
                 .GetElement(_element.LevelId)
                 .Name;
-
         }
 
         public ElementId ElementId  => _element.Id;
