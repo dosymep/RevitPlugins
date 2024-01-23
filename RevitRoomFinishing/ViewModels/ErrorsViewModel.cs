@@ -9,8 +9,8 @@ using dosymep.WPF.ViewModels;
 
 namespace RevitRoomFinishing.ViewModels {
     internal class ErrorsViewModel : BaseViewModel {
-        private ErrorsListViewModel _selectedList;
         private ObservableCollection<ErrorsListViewModel> _errorLists;
+        private ErrorsListViewModel _selectedList;
 
         public ErrorsViewModel() {
             _errorLists = new ObservableCollection<ErrorsListViewModel>();

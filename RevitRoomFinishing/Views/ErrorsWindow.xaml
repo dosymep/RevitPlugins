@@ -35,11 +35,11 @@
                 <GridView>
                     <GridViewColumn
                         Header="Тип"
-                        Width="100"
+                        Width="120"
                         DisplayMemberBinding="{Binding Message}"/>
                     <GridViewColumn
                         Header="Описание"
-                        Width="280"
+                        Width="260"
                         DisplayMemberBinding="{Binding Description}"/>
                 </GridView>
             </ListView.View>

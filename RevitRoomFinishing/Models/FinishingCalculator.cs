@@ -88,7 +88,7 @@ namespace RevitRoomFinishing.Models
 
         private List<ErrorElement> CheckRoomsByParameter(string paramName) {
             return _revitRooms
-                .Where(x => x.GetParam(paramName) == null)
+                .Where(x => string.IsNullOrEmpty(x.GetParamValue<string>(paramName)))
                 .Select(x => new ErrorElement(x))
                 .ToList();
         }
