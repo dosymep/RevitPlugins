@@ -10,6 +10,7 @@ using Autodesk.Revit.DB;
 using RevitRoomFinishing.ViewModels;
 using dosymep.Bim4Everyone;
 using dosymep.Revit;
+using RevitRoomFinishing.Views;
 
 namespace RevitRoomFinishing.Models
 {
@@ -18,46 +19,53 @@ namespace RevitRoomFinishing.Models
         private readonly List<Element> _revitRooms;
         private readonly Finishing _revitFinishings;
         private readonly List<FinishingElement> _finishings;
-        private readonly List<ErrorsListViewModel> _errorLists;
-        private readonly List<ErrorsListViewModel> _warningLists;
+
+        //private readonly List<ErrorsListViewModel> _errorLists;
+        //private readonly List<ErrorsListViewModel> _warningLists;
+
+        private readonly ErrorsViewModel _errors;
+        private readonly ErrorsViewModel _warnings;
         private Dictionary<string, FinishingType> _roomsByFinishingType;
 
         public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
 
-            _errorLists = new List<ErrorsListViewModel>();
-            _warningLists = new List<ErrorsListViewModel>();
+            //_errorLists = new List<ErrorsListViewModel>();
+            //_warningLists = new List<ErrorsListViewModel>();
 
-            _errorLists.Add(new ErrorsListViewModel() {
+            _errors = new ErrorsViewModel();
+            _warnings = new ErrorsViewModel();
+
+            _errors.AddElements(new ErrorsListViewModel() {
                 Message = "Ошибка",
-                Description = "Ошибка в следующиих элементах",
+                Description = "Экземпляры отделки не являются границами помещений",
                 Elements = new ObservableCollection<ErrorElement>(CheckFinishingByRoomBounding())
             });
-
-            _errorLists.Add(new ErrorsListViewModel() {
+            _errors.AddElements(new ErrorsListViewModel() {
                 Message = "Ошибка",
-                Description = "Ошибка в следующиих элементах",
+                Description = "У помещений не заполнен ключевой параметр отделки",
                 Elements = new ObservableCollection<ErrorElement>(CheckRoomsByKeyParameter("ОТД_Тип отделки"))
             });
 
-            if(!_errorLists.Any()) {
+            if(!_errors.ErrorLists.Any()) {
                 _finishings = SetRoomsForFinishing();
-                _errorLists.Add(new ErrorsListViewModel() {
+
+                _errors.AddElements(new ErrorsListViewModel() {
                     Message = "Ошибка",
-                    Description = "Ошибка в следующиих элементах",
+                    Description = "Элементы отделки относятся к помещениям с разными типами отделки",
                     Elements = new ObservableCollection<ErrorElement>(CheckFinishingByRoom())
                 });
 
-                _warningLists.Add(new ErrorsListViewModel() {
+                _warnings.AddElements(new ErrorsListViewModel() {
                     Message = "Предупреждение",
-                    Description = "Ошибка в следующиих элементах",
+                    Description = "У помещений не заполнен параметр \"Номер\"",
                     Elements = new ObservableCollection<ErrorElement>(CheckRoomsByParameter("Номер"))
                 });
 
-                _warningLists.Add(new ErrorsListViewModel() {
+                _warnings.AddElements(new ErrorsListViewModel() {
                     Message = "Предупреждение",
-                    Description = "Ошибка в следующиих элементах",
+                    Description = "У помещений не заполнен параметр \"Имя\"",
                     Elements = new ObservableCollection<ErrorElement>(CheckRoomsByParameter("Имя"))
                 });
             }
@@ -65,8 +73,11 @@ namespace RevitRoomFinishing.Models
 
         public List<FinishingElement> Finishings => _finishings;
         public Dictionary<string, FinishingType> RoomsByFinishingType => _roomsByFinishingType;
-        public List<ErrorsListViewModel> ErrorElements => _errorLists;
-        public List<ErrorsListViewModel> WarningElements => _warningLists;
+        //public List<ErrorsListViewModel> ErrorElements => _errorLists;
+        //public List<ErrorsListViewModel> WarningElements => _warningLists;     
+        
+        public ErrorsViewModel ErrorElements => _errors;
+        public ErrorsViewModel WarningElements => _warnings;
 
         public List<ErrorElement> CheckFinishingByRoomBounding() {
             return _revitFinishings

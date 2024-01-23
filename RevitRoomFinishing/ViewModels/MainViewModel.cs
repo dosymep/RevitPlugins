@@ -67,21 +67,17 @@ namespace RevitRoomFinishing.ViewModels {
 
             FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishing);
 
-            if(calculator.ErrorElements.Any()) {
+            if(calculator.ErrorElements.ErrorLists.Any()) {
                 var window = new ErrorsInfoWindow() {
-                    DataContext = new ErrorsInfoViewModel() {
-                        ErrorLists = new ObservableCollection<ErrorsListViewModel>(calculator.ErrorElements)
-                    }
+                    DataContext = calculator.ErrorElements
                 };
                 window.Show();
                 return;
             }
 
-            if(calculator.WarningElements.Any()) {
+            if(calculator.WarningElements.ErrorLists.Any()) {
                 var window = new ErrorsInfoWindow() {
-                    DataContext = new ErrorsInfoViewModel() {
-                        ErrorLists = new ObservableCollection<ErrorsListViewModel>(calculator.WarningElements)
-                    }
+                    DataContext = calculator.WarningElements
                 };
                 window.Show();
             }
