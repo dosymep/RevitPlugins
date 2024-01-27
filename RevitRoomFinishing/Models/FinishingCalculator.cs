@@ -22,14 +22,15 @@ namespace RevitRoomFinishing.Models
 
         private readonly string _phaseName;
 
+        private readonly List<RoomElement> _finishingRooms;
+
         private readonly ErrorsViewModel _errors;
         private readonly ErrorsViewModel _warnings;
-        private Dictionary<string, FinishingType> _roomsByFinishingType;
+        private readonly Dictionary<string, FinishingType> _roomsByFinishingType;
 
         public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings, Phase phase) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
-
             _phaseName = phase.Name;
 
             _errors = new ErrorsViewModel();
@@ -47,7 +48,12 @@ namespace RevitRoomFinishing.Models
             });
 
             if(!_errors.ErrorLists.Any()) {
+                _finishingRooms = _revitRooms
+                    .OfType<Room>()
+                    .Select(x => new RoomElement(x, _revitFinishings))
+                    .ToList();
                 _finishings = SetRoomsForFinishing();
+                _roomsByFinishingType = GroupRoomsByFinishingType();
 
                 _errors.AddElements(new ErrorsListViewModel() {
                     Message = "Ошибка",
@@ -106,14 +112,9 @@ namespace RevitRoomFinishing.Models
         }
 
         private List<FinishingElement> SetRoomsForFinishing() {    
-            List<RoomElement> finishingRooms = _revitRooms
-                .OfType<Room>()
-                .Select(x => new RoomElement(x, _revitFinishings))
-                .ToList();
-
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
-            foreach(var room in finishingRooms) {
+            foreach(var room in _finishingRooms) {
                 foreach(var finishingRevitElement in room.AllFinishing) {
                     ElementId finishingElementId = finishingRevitElement.Id;
                     if(allFinishings.TryGetValue(finishingElementId, out FinishingElement elementInDict)) {
@@ -128,12 +129,13 @@ namespace RevitRoomFinishing.Models
                     }
                 }
             }
+            return allFinishings.Values.ToList();
+        }
 
-            _roomsByFinishingType = finishingRooms
+        private Dictionary<string, FinishingType> GroupRoomsByFinishingType() {
+            return _finishingRooms
                 .GroupBy(x => x.RoomFinishingType)
                 .ToDictionary(x => x.Key, x => new FinishingType(x.ToList()));
-
-            return allFinishings.Values.ToList();
         }
     }
 }

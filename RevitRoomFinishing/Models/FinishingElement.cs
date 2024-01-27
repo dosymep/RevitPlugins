@@ -27,7 +27,7 @@ namespace RevitRoomFinishing.Models
         public Element RevitElement => _revitElement;
         public List<RoomElement> Rooms { get; set; }
 
-        private string GetRoomsStrParameters(string parameterName) {
+        private string GetRoomsParameters(string parameterName) {
             IEnumerable<string> values = Rooms
                 .Select(x => x.RevitRoom.GetParamValue<string>(parameterName))
                 .Distinct();
@@ -59,25 +59,27 @@ namespace RevitRoomFinishing.Models
         public void UpdateFinishingParameters() {
             FinishingType finishingType = _calculator.RoomsByFinishingType[Rooms.First().RoomFinishingType];
 
-            _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 1", GetRoomsStrParameters("ФОП_ОТД_Полы Тип 1"));
-            _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 2", GetRoomsStrParameters("ФОП_ОТД_Полы Тип 2"));
-            _revitElement.SetParamValue("ФОП_ОТД_Потолки Тип 1", GetRoomsStrParameters("ФОП_ОТД_Потолки Тип 1"));
-            _revitElement.SetParamValue("ФОП_ОТД_Потолки Тип 2", GetRoomsStrParameters("ФОП_ОТД_Потолки Тип 2"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 1", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 1"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 2", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 2"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 3", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 3"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 4", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 4"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 5", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 5"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 6", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 6"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 7", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 7"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 8", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 8"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 9", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 9"));
-            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 10", GetRoomsStrParameters("ФОП_ОТД_Стены Тип 10"));
-            _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 1", GetRoomsStrParameters("ФОП_ОТД_Плинтусы Тип 1"));
-            _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 2", GetRoomsStrParameters("ФОП_ОТД_Плинтусы Тип 2"));
+            _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 1", GetRoomsParameters("ФОП_ОТД_Полы Тип 1"));
+            _revitElement.SetParamValue("ФОП_ОТД_Полы Тип 2", GetRoomsParameters("ФОП_ОТД_Полы Тип 2"));
+            _revitElement.SetParamValue("ФОП_ОТД_Потолки Тип 1", GetRoomsParameters("ФОП_ОТД_Потолки Тип 1"));
+            _revitElement.SetParamValue("ФОП_ОТД_Потолки Тип 2", GetRoomsParameters("ФОП_ОТД_Потолки Тип 2"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 1", GetRoomsParameters("ФОП_ОТД_Стены Тип 1"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 2", GetRoomsParameters("ФОП_ОТД_Стены Тип 2"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 3", GetRoomsParameters("ФОП_ОТД_Стены Тип 3"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 4", GetRoomsParameters("ФОП_ОТД_Стены Тип 4"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 5", GetRoomsParameters("ФОП_ОТД_Стены Тип 5"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 6", GetRoomsParameters("ФОП_ОТД_Стены Тип 6"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 7", GetRoomsParameters("ФОП_ОТД_Стены Тип 7"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 8", GetRoomsParameters("ФОП_ОТД_Стены Тип 8"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 9", GetRoomsParameters("ФОП_ОТД_Стены Тип 9"));
+            _revitElement.SetParamValue("ФОП_ОТД_Стены Тип 10", GetRoomsParameters("ФОП_ОТД_Стены Тип 10"));
+            _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 1", GetRoomsParameters("ФОП_ОТД_Плинтусы Тип 1"));
+            _revitElement.SetParamValue("ФОП_ОТД_Плинтусы Тип 2", GetRoomsParameters("ФОП_ОТД_Плинтусы Тип 2"));
 
-            _revitElement.SetParamValue("ФОП_ОТД_Имя помещения", GetRoomsStrParameters("Имя"));
-            _revitElement.SetParamValue("ФОП_ОТД_Номер помещения", GetRoomsStrParameters("Номер"));
+            _revitElement.SetParamValue("ФОП_ОТД_Имя помещения", GetRoomsParameters("Имя"));
+            _revitElement.SetParamValue("ФОП_ОТД_Номер помещения", GetRoomsParameters("Номер"));
+            _revitElement.SetParamValue("ФОП_ОТД_Имена помещений", finishingType.GetRoomsParameters("Имя"));
+            _revitElement.SetParamValue("ФОП_ОТД_Номера помещений", finishingType.GetRoomsParameters("Номер"));
 
             _revitElement.SetParamValue("ФОП_ОТД_Тип отделки_ТЕ", GetRoomsKeyParameters("ОТД_Тип отделки"));
             

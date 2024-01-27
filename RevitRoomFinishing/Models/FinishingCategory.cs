@@ -27,13 +27,13 @@ namespace RevitRoomFinishing.Models {
         public static FinishingCategory Floors { get; } = new FinishingCategory() {
             Name = "Перекрытия",
             KeyWord = "(АР)",
-            Category = BuiltInCategory.OST_Walls
+            Category = BuiltInCategory.OST_Floors
         };
 
         public static FinishingCategory Ceilings { get; } = new FinishingCategory() {
             Name = "Потолки",
             KeyWord = "(О) Потолок",
-            Category = BuiltInCategory.OST_Walls
+            Category = BuiltInCategory.OST_Ceilings
         };
 
     }

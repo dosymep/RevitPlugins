@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Autodesk.AdvanceSteel.Modelling;
 using Autodesk.Revit.DB;
 
+using dosymep.Bim4Everyone;
+using dosymep.Revit;
+
 namespace RevitRoomFinishing.Models {
     internal class FinishingType {
         private readonly List<RoomElement> _rooms;
@@ -44,6 +47,13 @@ namespace RevitRoomFinishing.Models {
 
         public int GetBaseboardOrder(string typeName) {
             return _baseboardTypesByOrder.IndexOf(typeName) + 1;
+        }
+        public string GetRoomsParameters(string parameterName) {
+            IEnumerable<string> values = _rooms
+                .Select(x => x.RevitRoom.GetParamValue<string>(parameterName))
+                .Distinct();
+
+            return string.Join("; ", values);
         }
 
         private List<string> CalculateFinishingOrder(IList<Element> finishingElements) {
