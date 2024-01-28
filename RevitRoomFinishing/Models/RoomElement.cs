@@ -28,7 +28,7 @@ namespace RevitRoomFinishing.Models
         private readonly IReadOnlyCollection<Element> _ceilings;
         private readonly IReadOnlyCollection<Element> _baseboards;
        
-        public RoomElement(Room room, Finishing finishingElements) {
+        public RoomElement(Room room, FinishingInProject finishingElements) {
             _revitRoom = room;
             _document = room.Document;
             _roomFinishingType = _revitRoom.GetParam("ОТД_Тип отделки").AsValueString();

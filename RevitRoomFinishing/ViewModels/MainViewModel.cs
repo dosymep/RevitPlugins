@@ -60,12 +60,7 @@ namespace RevitRoomFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
-            Finishing finishing = new Finishing() {
-                Walls = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Walls, SelectedPhase),
-                Floors = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Floors, SelectedPhase),
-                Ceilings = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Ceilings, SelectedPhase),
-                Baseboards = _revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Baseboards, SelectedPhase)
-            };
+            FinishingInProject finishing = new FinishingInProject(_revitRepository, SelectedPhase);
 
             IEnumerable<Element> selectedRooms = Rooms
                 .Where(x => x.IsChecked)

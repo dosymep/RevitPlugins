@@ -17,7 +17,7 @@ namespace RevitRoomFinishing.Models
     class FinishingCalculator
     {
         private readonly List<Element> _revitRooms;
-        private readonly Finishing _revitFinishings;
+        private readonly FinishingInProject _revitFinishings;
         private readonly List<FinishingElement> _finishings;
 
         private readonly string _phaseName;
@@ -28,7 +28,7 @@ namespace RevitRoomFinishing.Models
         private readonly ErrorsViewModel _warnings;
         private readonly Dictionary<string, FinishingType> _roomsByFinishingType;
 
-        public FinishingCalculator(IEnumerable<Element> rooms, Finishing finishings, Phase phase) {
+        public FinishingCalculator(IEnumerable<Element> rooms, FinishingInProject finishings, Phase phase) {
             _revitRooms = rooms.ToList();
             _revitFinishings = finishings;
             _phaseName = phase.Name;
@@ -83,7 +83,7 @@ namespace RevitRoomFinishing.Models
 
         public List<ErrorElement> CheckFinishingByRoomBounding() {
             return _revitFinishings
-                .AllFinishings
+                .AllFinishing
                 .Where(x => x.GetParamValueOrDefault(BuiltInParameter.WALL_ATTR_ROOM_BOUNDING, 0) == 1)
                 .Select(x => new ErrorElement(x, _phaseName))
                 .ToList();
