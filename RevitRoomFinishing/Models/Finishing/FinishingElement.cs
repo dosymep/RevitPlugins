@@ -10,10 +10,12 @@ using Autodesk.Revit.DB.Architecture;
 using dosymep.Bim4Everyone;
 using dosymep.Revit;
 
-using pyRevitLabs.Json.Linq;
-
 namespace RevitRoomFinishing.Models
 {
+    /// <summary>
+    /// Класс для экземпляра отделки.
+    /// Каждый элемент отделки хранит список всех помещений, к которым он относится.
+    /// </summary>
     class FinishingElement
     {
         private readonly Element _revitElement;
@@ -43,11 +45,14 @@ namespace RevitRoomFinishing.Models
             return string.Join("; ", values);
         }
 
+        /// <summary>
+        /// Проверка типов отделки помещений.
+        /// Все помещения, к которым относятся экземпляр отделки должны иметь одинаковый тип отделки.
+        /// </summary>
+        /// <returns></returns>
         public bool CheckFinishingTypes() {
             List<string> finishingTypes = Rooms
-                .Select(x => x.RevitRoom)
-                //.Select(x => x.GetParamValueString("ОТД_Тип отделки"))
-                .Select(x => x.GetParam("ОТД_Тип отделки").AsValueString())
+                .Select(x => x.RoomFinishingType)
                 .Distinct()
                 .ToList();
 
@@ -98,7 +103,7 @@ namespace RevitRoomFinishing.Models
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип пола_ДЕ", finishingType.GetFloorOrder(_revitElement.Name));
             } 
-            else {
+            else if(_revitElement.Name.Contains(FinishingCategory.Ceilings.KeyWord)) {
                 _revitElement.SetParamValue("ФОП_РАЗМ_Длина_ДЕ", _revitElement.GetParamValue<double>("Периметр"));
                 _revitElement.SetParamValue("ФОП_ОТД_Тип потолка_ДЕ", finishingType.GetCeilingOrder(_revitElement.Name));
             }
