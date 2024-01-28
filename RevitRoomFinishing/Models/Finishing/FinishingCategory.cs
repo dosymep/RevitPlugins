@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 
 namespace RevitRoomFinishing.Models {
+    /// <summary>
+    /// Класс для описания категорий отделки.
+    /// Категория отделки хранит информацию о категории семейств отделки в Revit 
+    /// и ключевом слове, которое должно быть в каждом типоразмере семейства отделки.
+    /// </summary>
     internal class FinishingCategory {
         public string Name { get; set; }
         public string KeyWord { get; set; }
