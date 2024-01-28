@@ -4,33 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Autodesk.AdvanceSteel.Modelling;
 using Autodesk.Revit.DB;
 
 using dosymep.Bim4Everyone;
 using dosymep.Revit;
 
 namespace RevitRoomFinishing.Models {
+    /// <summary>
+    /// Класс для группировки помещений по типу отделки.
+    /// Тип отделки помещения определяется значением ключевого параметра помещения.
+    /// </summary>
     internal class FinishingType {
-        private readonly List<RoomElement> _rooms;
+        private readonly IEnumerable<RoomElement> _rooms;
 
-        private readonly List<string> _wallTypesByOrder;
-        private readonly List<string> _floorTypesByOrder;
-        private readonly List<string> _ceilingTypesByOrder;
-        private readonly List<string> _baseboardTypesByOrder;
+        private readonly IList<string> _wallTypesByOrder;
+        private readonly IList<string> _floorTypesByOrder;
+        private readonly IList<string> _ceilingTypesByOrder;
+        private readonly IList<string> _baseboardTypesByOrder;
 
-        public FinishingType(List<RoomElement> rooms) {
+        public FinishingType(IEnumerable<RoomElement> rooms) {
             _rooms = rooms;
 
-            IList<Element> _walls = _rooms.SelectMany(x => x.Walls).ToList();
-            IList<Element> _floors = _rooms.SelectMany(x => x.Floors).ToList();
-            IList<Element> _ceilings = _rooms.SelectMany(x => x.Ceilings).ToList();
-            IList<Element> _baseboards = _rooms.SelectMany(x => x.Baseboards).ToList();
+            IList<Element> walls = _rooms.SelectMany(x => x.Walls).ToList();
+            IList<Element> floors = _rooms.SelectMany(x => x.Floors).ToList();
+            IList<Element> ceilings = _rooms.SelectMany(x => x.Ceilings).ToList();
+            IList<Element> baseboards = _rooms.SelectMany(x => x.Baseboards).ToList();
 
-            _wallTypesByOrder = CalculateFinishingOrder(_walls);
-            _floorTypesByOrder = CalculateFinishingOrder(_floors);
-            _ceilingTypesByOrder = CalculateFinishingOrder(_ceilings);
-            _baseboardTypesByOrder = CalculateFinishingOrder(_baseboards);
+            _wallTypesByOrder = CalculateFinishingOrder(walls);
+            _floorTypesByOrder = CalculateFinishingOrder(floors);
+            _ceilingTypesByOrder = CalculateFinishingOrder(ceilings);
+            _baseboardTypesByOrder = CalculateFinishingOrder(baseboards);
         }
 
         public int GetWallOrder(string typeName) {
@@ -48,6 +51,7 @@ namespace RevitRoomFinishing.Models {
         public int GetBaseboardOrder(string typeName) {
             return _baseboardTypesByOrder.IndexOf(typeName) + 1;
         }
+
         public string GetRoomsParameters(string parameterName) {
             IEnumerable<string> values = _rooms
                 .Select(x => x.RevitRoom.GetParamValue<string>(parameterName))
@@ -56,7 +60,7 @@ namespace RevitRoomFinishing.Models {
             return string.Join("; ", values);
         }
 
-        private List<string> CalculateFinishingOrder(IList<Element> finishingElements) {
+        private List<string> CalculateFinishingOrder(IEnumerable<Element> finishingElements) {
             return finishingElements
                 .Select(x => x.Name)
                 .Distinct()
