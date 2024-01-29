@@ -14,6 +14,9 @@ using RevitRoomFinishing.Views;
 
 namespace RevitRoomFinishing.Models
 {
+    /// <summary>
+    /// Класс для расчетов отделки помещений в проекте Revit.
+    /// </summary>
     class FinishingCalculator
     {
         private readonly List<Element> _revitRooms;
@@ -111,6 +114,11 @@ namespace RevitRoomFinishing.Models
                 .ToList();
         }
 
+        /// <summary>
+        /// Метод сопоставляет каждый элемент отделки с каждым помеещнием, 
+        /// к которому этот элемент относится.
+        /// </summary>
+        /// <returns></returns>
         private List<FinishingElement> SetRoomsForFinishing() {    
             Dictionary<ElementId, FinishingElement> allFinishings = new Dictionary<ElementId, FinishingElement>();
 
