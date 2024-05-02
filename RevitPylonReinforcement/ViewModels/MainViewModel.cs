@@ -41,89 +41,86 @@ namespace RevitPylonReinforcement.ViewModels {
         private void LoadView() {
 
 
-            Floor floor = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as Floor).FirstOrDefault();
+            //Floor floor = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as Floor).FirstOrDefault();
 
-
-            Options opt = new Options();
-            opt.ComputeReferences = true;
-            GeometryElement geomElem = floor.get_Geometry(opt);
-
-            Face face = null;
-
-            foreach(GeometryObject geomObj in geomElem) {
-
-                Solid solid = geomObj as Solid;
-
-                if(solid is null) { continue; }
-
-                foreach(Face faceTemp in solid.Faces) {
-
-                    if(faceTemp is null) { continue; }
-
-                    if(faceTemp.ComputeNormal(new UV()).Z == 1) {
-                        face = faceTemp;
-                        break;
-                    }
-                }
-            }
-
-            if(face is null) {
-                TaskDialog.Show("fd", "Ахтунг, FACE is NULL");
-            }
-
-
-
-
-            EdgeArrayArray curveArr = face.EdgeLoops;
-            List<GeometryObject> curves = new List<GeometryObject>();
-
-            foreach(EdgeArray edgeArray in curveArr) {
-                foreach(Edge item in edgeArray) {
-                    curves.Add(item.AsCurve());
-                }
-            }
-
-            TaskDialog.Show("fd", curves.Count.ToString());
-
-
-
-            //List<Face> faces = new List<Face>();
-            //FamilyInstance pylon = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as FamilyInstance).FirstOrDefault();
 
             //Options opt = new Options();
             //opt.ComputeReferences = true;
-            //GeometryElement geomElem = pylon.get_Geometry(opt);
+            //GeometryElement geomElem = floor.get_Geometry(opt);
+
+            //Face face = null;
 
             //foreach(GeometryObject geomObj in geomElem) {
 
             //    Solid solid = geomObj as Solid;
-            //    if(solid is null) {
-            //        continue;
-            //    }
 
-            //    foreach(Face face in solid.Faces) {
-            //        faces.Add(face);
+            //    if(solid is null) { continue; }
+
+            //    foreach(Face faceTemp in solid.Faces) {
+
+            //        if(faceTemp is null) { continue; }
+
+            //        if(faceTemp.ComputeNormal(new UV()).Z == 1) {
+            //            face = faceTemp;
+            //            break;
+            //        }
             //    }
             //}
 
-            //TaskDialog.Show("Итого faces", faces.Count.ToString());
-
-            //SweptProfile sweptProfile = pylon.GetSweptProfile();
-            //Curve curve = sweptProfile.GetDrivingCurve();
-            //XYZ p0 = curve.GetEndPoint(0);
-            //XYZ p1 = curve.GetEndPoint(1);
-
-            //TaskDialog.Show("Итого faces", (p0.Z * 304.8).ToString());
-            //TaskDialog.Show("Итого faces", (p1.Z * 304.8).ToString());
+            //if(face is null) {
+            //    TaskDialog.Show("fd", "Ахтунг, FACE is NULL");
+            //}
 
 
 
+
+            //EdgeArrayArray curveArr = face.EdgeLoops;
             //List<GeometryObject> curves = new List<GeometryObject>();
-            //curves.Add(curve);
 
-            //foreach(Curve c in sweptProfile.GetSweptProfile().Curves) {
-            //    curves.Add(c);
+            //foreach(EdgeArray edgeArray in curveArr) {
+            //    foreach(Edge item in edgeArray) {
+            //        curves.Add(item.AsCurve());
+            //    }
             //}
+
+            //TaskDialog.Show("fd", curves.Count.ToString());
+
+
+
+
+
+
+            List<Face> faces = new List<Face>();
+            FamilyInstance pylon = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as FamilyInstance).FirstOrDefault();
+
+            PylonModel pylonModel = new PylonModel(pylon);
+
+            List<GeometryObject> curvesForPrint = new List<GeometryObject>();
+
+            curvesForPrint.Add(pylonModel.DrivingCurve);
+
+            Line newLine2 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom1Pt);
+            Line newLine3 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom2Pt);
+            Line newLine4 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom3Pt);
+            Line newLine5 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom4Pt);
+
+            Line newLine6 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top1Pt);
+            Line newLine7 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top2Pt);
+            Line newLine8 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top3Pt);
+            Line newLine9 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top4Pt);
+
+
+            curvesForPrint.Add(newLine2);
+            curvesForPrint.Add(newLine3);
+            curvesForPrint.Add(newLine4);
+            curvesForPrint.Add(newLine5);
+
+            curvesForPrint.Add(newLine6);
+            curvesForPrint.Add(newLine7);
+            curvesForPrint.Add(newLine8);
+            curvesForPrint.Add(newLine9);
+
+
 
 
             using(Transaction transaction = _revitRepository.Document.StartTransaction("Документатор АР")) {
@@ -132,7 +129,7 @@ namespace RevitPylonReinforcement.ViewModels {
                 ds.ApplicationId = "Application id";
                 ds.ApplicationDataId = "Geometry object id";
 
-                ds.SetShape(curves);
+                ds.SetShape(curvesForPrint);
 
                 transaction.Commit();
             }
