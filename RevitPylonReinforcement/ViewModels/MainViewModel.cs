@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-using dosymep.Revit;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
 using RevitPylonReinforcement.Models;
+using RevitPylonReinforcement.Views;
 
 namespace RevitPylonReinforcement.ViewModels {
     internal class MainViewModel : BaseViewModel {
@@ -40,7 +41,7 @@ namespace RevitPylonReinforcement.ViewModels {
         /// </summary>
         private void LoadView() {
 
-
+            #region
             //Floor floor = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as Floor).FirstOrDefault();
 
 
@@ -84,61 +85,62 @@ namespace RevitPylonReinforcement.ViewModels {
             //}
 
             //TaskDialog.Show("fd", curves.Count.ToString());
+            #endregion
 
 
 
 
 
+            //List<Face> faces = new List<Face>();
+            //FamilyInstance pylon = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as FamilyInstance).FirstOrDefault();
 
-            List<Face> faces = new List<Face>();
-            FamilyInstance pylon = _revitRepository.ActiveUIDocument.Selection.GetElementIds().Select(id => _revitRepository.Document.GetElement(id) as FamilyInstance).FirstOrDefault();
+            //PylonModel pylonModel = new PylonModel(pylon);
 
-            PylonModel pylonModel = new PylonModel(pylon);
+            //List<GeometryObject> curvesForPrint = new List<GeometryObject>();
 
-            List<GeometryObject> curvesForPrint = new List<GeometryObject>();
+            //curvesForPrint.Add(pylonModel.DrivingCurve);
 
-            curvesForPrint.Add(pylonModel.DrivingCurve);
+            //Line newLine2 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom1Pt);
+            //Line newLine3 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom2Pt);
+            //Line newLine4 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom3Pt);
+            //Line newLine5 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom4Pt);
 
-            Line newLine2 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom1Pt);
-            Line newLine3 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom2Pt);
-            Line newLine4 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom3Pt);
-            Line newLine5 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Bottom4Pt);
-
-            Line newLine6 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top1Pt);
-            Line newLine7 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top2Pt);
-            Line newLine8 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top3Pt);
-            Line newLine9 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top4Pt);
+            //Line newLine6 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top1Pt);
+            //Line newLine7 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top2Pt);
+            //Line newLine8 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top3Pt);
+            //Line newLine9 = Line.CreateBound(pylonModel.TopMiddlePt, pylonModel.Top4Pt);
 
 
-            curvesForPrint.Add(newLine2);
-            curvesForPrint.Add(newLine3);
-            curvesForPrint.Add(newLine4);
-            curvesForPrint.Add(newLine5);
+            //curvesForPrint.Add(newLine2);
+            //curvesForPrint.Add(newLine3);
+            //curvesForPrint.Add(newLine4);
+            //curvesForPrint.Add(newLine5);
 
-            curvesForPrint.Add(newLine6);
-            curvesForPrint.Add(newLine7);
-            curvesForPrint.Add(newLine8);
-            curvesForPrint.Add(newLine9);
-
+            //curvesForPrint.Add(newLine6);
+            //curvesForPrint.Add(newLine7);
+            //curvesForPrint.Add(newLine8);
+            //curvesForPrint.Add(newLine9);
 
 
 
-            using(Transaction transaction = _revitRepository.Document.StartTransaction("Документатор АР")) {
 
-                DirectShape ds = DirectShape.CreateElement(_revitRepository.Document, new ElementId(BuiltInCategory.OST_GenericModel));
-                ds.ApplicationId = "Application id";
-                ds.ApplicationDataId = "Geometry object id";
+            //using(Transaction transaction = _revitRepository.Document.StartTransaction("Документатор АР")) {
 
-                ds.SetShape(curvesForPrint);
+            //    DirectShape ds = DirectShape.CreateElement(_revitRepository.Document, new ElementId(BuiltInCategory.OST_GenericModel));
+            //    ds.ApplicationId = "Application id";
+            //    ds.ApplicationDataId = "Geometry object id";
 
-                transaction.Commit();
-            }
+            //    ds.SetShape(curvesForPrint);
+
+            //    transaction.Commit();
+            //}
 
 
 
             // Подгружаем сохраненные данные прошлого запуска
             LoadConfig();
         }
+
 
 
         /// <summary>
@@ -149,6 +151,111 @@ namespace RevitPylonReinforcement.ViewModels {
 
             // Метод по добавлению параметров
             SaveConfig();
+
+
+            string oldDocPath = _revitRepository.Document.PathName;
+            if(string.IsNullOrEmpty(oldDocPath)) {
+                TaskDialog.Show("Ошибка!", "Необходимо сохранить проект перед запуском этого плагина!");
+                return;
+            }
+
+
+            // Формирование закрепляемой панели
+            DockablePaneId dockablePaneId = new DockablePaneId(new Guid("{8019815A-EFC5-4C82-9462-338670C274C1}"));
+
+
+            UIApplication uIApplication = _revitRepository.UIApplication;
+            DockablePane dockablePane;
+
+            // Пытаемся получить закрепляемую панель, если еще не создана - создаем
+            try {
+
+                dockablePane = uIApplication.GetDockablePane(dockablePaneId);
+            } catch(Exception) {
+
+                DockablePaneProviderData data = new DockablePaneProviderData();
+                SettingsMainPage managerPage = new SettingsMainPage();
+                data.FrameworkElement = managerPage as FrameworkElement;
+                data.InitialState = new DockablePaneState();
+                data.InitialState.DockPosition = DockPosition.Right;
+                data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.PropertiesPalette;
+
+                uIApplication.RegisterDockablePane(dockablePaneId, "Корректор свойств", managerPage as IDockablePaneProvider);
+
+                // Формирование пути к временному файлу
+                string revitVersion = _revitRepository.Application.VersionNumber;
+                string pathForTempFile = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    + $"\\dosymep\\{revitVersion}\\RevitPylonReinforcement\\TempFile.rvt";
+
+                // Формирование временного файла
+                Document tempDocument = _revitRepository.Application.NewProjectDocument(UnitSystem.Metric);
+                SaveAsOptions saveAsOptions = new SaveAsOptions();
+                saveAsOptions.OverwriteExistingFile = true;
+                saveAsOptions.MaximumBackups = 1;
+
+                tempDocument.SaveAs(pathForTempFile, saveAsOptions);
+
+                // Открытие с интерфейсом временного файла
+                uIApplication.OpenAndActivateDocument(pathForTempFile);
+
+                // Переход обратно к целевому файлу
+                uIApplication.OpenAndActivateDocument(oldDocPath);
+
+                // Закрытие и удаление временного файла
+                tempDocument.Close(false);
+                System.IO.File.Delete(pathForTempFile);
+
+                dockablePane = uIApplication.GetDockablePane(dockablePaneId);
+            }
+
+
+            TaskDialog.Show("fd", dockablePane.Id.ToString());
+
+
+
+
+
+            //System.Threading.Thread.Sleep(5000);
+            //tempUIDocument.SaveAndClose();
+            // Не выходит закрыть документ, виды которого не активны из-за того, что есть какие то транзакции
+            //tempDocument.Close(false);
+
+
+            //DockablePane dp = _revitRepository.UIApplication.GetDockablePane(dpid);
+            //TaskDialog.Show("fd", dp.IsShown().ToString());
+            //dp.Show();
+
+
+
+
+
+            //UIApplication uiApp = new UIApplication(_revitRepository.UIApplication.Application);
+            //Document doc = _revitRepository.UIApplication.ActiveUIDocument.Document;
+            //using(Transaction t = new Transaction(doc, "Text Note Creation")) {
+            //    t.Start();
+            //    oldDateTime = DateTime.Now.ToString();
+            //    ElementId defaultTextTypeId = doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType);
+            //    textNote = TextNote.Create(doc, doc.ActiveView.Id, XYZ.Zero, oldDateTime, defaultTextTypeId);
+            //    t.Commit();
+            //}
+            //uiApp.Idling += new EventHandler<IdlingEventArgs>(idleUpdate);
+
+
+            //private TextNote textNote = null;
+            //private String oldDateTime = null;
+
+
+            //public void idleUpdate(object sender, IdlingEventArgs e) {
+            //    UIApplication uiApp = sender as UIApplication;
+            //    Document doc = uiApp.ActiveUIDocument.Document;
+            //    if(oldDateTime != DateTime.Now.ToString()) {
+            //        using(Transaction transaction = new Transaction(doc, "Text Note Update")) {
+            //            transaction.Start();
+            //            textNote.Text = DateTime.Now.ToString();
+            //            transaction.Commit();
+            //        }
+            //        oldDateTime = DateTime.Now.ToString();
+            //    }
         }
 
 

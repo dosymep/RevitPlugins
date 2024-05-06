@@ -48,7 +48,8 @@
                 Margin="10"
                 Width="80"
                 Content="ОК"
-                Click="ButtonOk_Click" />
+                Click="ButtonOk_Click"
+                Command="{Binding AcceptViewCommand}"/>
 
             <Button
                 Margin="10"
