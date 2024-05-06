@@ -8,18 +8,11 @@ namespace RevitPylonReinforcement.Views {
     /// <summary>
     /// Логика взаимодействия для SettingsMainPage.xaml
     /// </summary>
-    public partial class SettingsMainPage : Page, IDisposable, IDockablePaneProvider {
+    public partial class SettingsPage : Page, IDisposable, IDockablePaneProvider {
         #region constructor
 
-        /// <summary>
-        /// Default contructor.
-        /// Initializes a new instance of the <see cref="FamilyManagerMainPage"/> class.
-        /// </summary>
-        public SettingsMainPage() {
+        public SettingsPage() {
             InitializeComponent();
-
-            // Set data context for main application page.
-            //DataContext = new FamilyManagerMainPageViewModel();
         }
 
 
@@ -39,10 +32,12 @@ namespace RevitPylonReinforcement.Views {
         /// </summary>
         public void SetupDockablePane(DockablePaneProviderData data) {
             data.FrameworkElement = this as FrameworkElement;
+            data.EditorInteraction = new EditorInteraction(EditorInteractionType.KeepAlive);
 
-            // Define initial pane position in Revit ui.
             data.InitialState = new DockablePaneState {
-                DockPosition = DockPosition.Right,
+
+                TabBehind = DockablePanes.BuiltInDockablePanes.PropertiesPalette,
+                DockPosition = DockPosition.Tabbed
             };
         }
 

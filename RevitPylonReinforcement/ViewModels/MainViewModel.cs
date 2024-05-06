@@ -171,16 +171,22 @@ namespace RevitPylonReinforcement.ViewModels {
             try {
 
                 dockablePane = uIApplication.GetDockablePane(dockablePaneId);
+                dockablePane.Show();
+
             } catch(Exception) {
 
                 DockablePaneProviderData data = new DockablePaneProviderData();
-                SettingsMainPage managerPage = new SettingsMainPage();
-                data.FrameworkElement = managerPage as FrameworkElement;
-                data.InitialState = new DockablePaneState();
-                data.InitialState.DockPosition = DockPosition.Right;
-                data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.PropertiesPalette;
+                SettingsPage settingsPage = new SettingsPage();
 
-                uIApplication.RegisterDockablePane(dockablePaneId, "Корректор свойств", managerPage as IDockablePaneProvider);
+                SettingsPageViewModel settingsPageViewModel = new SettingsPageViewModel(_pluginConfig, _revitRepository);
+                settingsPage.DataContext = settingsPageViewModel;
+
+                data.FrameworkElement = settingsPage as FrameworkElement;
+                //data.InitialState = new DockablePaneState();
+                ////data.InitialState.DockPosition = DockPosition.Right;
+                //data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.PropertiesPalette;
+
+                uIApplication.RegisterDockablePane(dockablePaneId, "Корректор свойств", settingsPage as IDockablePaneProvider);
 
                 // Формирование пути к временному файлу
                 string revitVersion = _revitRepository.Application.VersionNumber;
@@ -209,7 +215,9 @@ namespace RevitPylonReinforcement.ViewModels {
             }
 
 
-            TaskDialog.Show("fd", dockablePane.Id.ToString());
+
+
+            //TaskDialog.Show("fd", dockablePane.Id.ToString());
 
 
 
