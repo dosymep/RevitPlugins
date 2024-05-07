@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 
 using Autodesk.Revit.DB;
@@ -8,10 +7,13 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 
+using dosymep.Revit;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
 using RevitPylonReinforcement.Models;
+
+using Transaction = Autodesk.Revit.DB.Transaction;
 
 namespace RevitPylonReinforcement.ViewModels {
     class SettingsPageViewModel : BaseViewModel {
@@ -31,8 +33,8 @@ namespace RevitPylonReinforcement.ViewModels {
 
             UIApplication uiApp = new UIApplication(_revitRepository.UIApplication.Application);
             //uiApp.Idling += new EventHandler<IdlingEventArgs>(idleUpdate);
-            uiApp.Idling += new EventHandler<IdlingEventArgs>(idleUpdateForElems);
 
+            uiApp.Idling += new EventHandler<IdlingEventArgs>(IdleUpdateForElems);
 
             _revitRepository.Application.DocumentChanged += new EventHandler<DocumentChangedEventArgs>(OnDocumentChanged);
         }
@@ -43,6 +45,88 @@ namespace RevitPylonReinforcement.ViewModels {
             get => _someText;
             set => this.RaiseAndSetIfChanged(ref _someText, value);
         }
+        public static List<ElementId> ElemIdsForWrite { get; set; } = new List<ElementId>();
+
+
+
+        static void OnDocumentChanged(object sender, DocumentChangedEventArgs e) {
+
+            if(e.Operation == UndoOperation.TransactionCommitted && e.GetAddedElementIds().Count > 0) {
+
+                ElemIdsForWrite.AddRange(e.GetAddedElementIds());
+            }
+        }
+
+
+        private List<BuiltInCategory> neededTypes = new List<BuiltInCategory>() {
+
+            BuiltInCategory.OST_Walls,
+            BuiltInCategory.OST_Floors,
+            BuiltInCategory.OST_Columns,
+            BuiltInCategory.OST_StructuralColumns,
+            BuiltInCategory.OST_StructuralFoundation,
+            BuiltInCategory.OST_Rebar
+        };
+
+
+
+        public void IdleUpdateForElems(object sender, IdlingEventArgs e) {
+
+            if(ElemIdsForWrite.Count > 0) {
+
+                Document doc = _revitRepository.Document;
+
+                foreach(ElementId id in ElemIdsForWrite) {
+
+                    Element elem = doc.GetElement(id);
+
+                    if(elem is null
+                        || elem.Category is null
+                        || !neededTypes.Contains(elem.Category.GetBuiltInCategory())) {
+
+                        continue;
+                    }
+
+                    using(Transaction transaction = doc.StartTransaction($"Element {id} change")) {
+
+                        try {
+
+                            Parameter parameter = elem.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS);
+
+                            if(parameter is null) {
+
+                                transaction.RollBack();
+                            } else {
+
+                                parameter.Set(SomeText);
+                                transaction.Commit();
+                            }
+
+                        } catch(Exception) {
+
+                            transaction.RollBack();
+                        }
+                    }
+                }
+
+                ElemIdsForWrite.Clear();
+            }
+        }
+
+
+        private void AcceptView() {
+
+            TaskDialog.Show("I'm okey!", SomeText);
+        }
+
+
+        private bool CanAcceptView() {
+
+            return true;
+        }
+
+
+
 
 
 
@@ -54,59 +138,6 @@ namespace RevitPylonReinforcement.ViewModels {
 
                 SomeText = DateTime.Now.ToString();
             }
-        }
-
-        public void idleUpdateForElems(object sender, IdlingEventArgs e) {
-
-            if(Temp.Count > 0) {
-
-                Document doc = _revitRepository.Document;
-                using(Transaction t = new Transaction(doc, "Element change")) {
-
-                    t.Start();
-                    foreach(ElementId id in Temp) {
-
-                        Wall wall = doc.GetElement(id) as Wall;
-
-                        if(wall is null) {
-
-                            continue;
-                        }
-                        wall.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS).Set("kuku");
-                    }
-                    t.Commit();
-                }
-
-                Temp.Clear();
-            }
-        }
-
-
-
-        public static List<ElementId> Temp { get; set; } = new List<ElementId>();
-
-
-        static void OnDocumentChanged(object sender, DocumentChangedEventArgs e) {
-
-            if(e.Operation == UndoOperation.TransactionCommitted && e.GetAddedElementIds().Count > 0) {
-
-                Temp = e.GetAddedElementIds().ToList();
-            }
-        }
-
-
-
-
-
-        private void AcceptView() {
-
-            TaskDialog.Show("Ok", "I'm okey!");
-        }
-
-
-        private bool CanAcceptView() {
-
-            return true;
         }
     }
 }
