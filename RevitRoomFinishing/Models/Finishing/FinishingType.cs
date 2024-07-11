@@ -52,9 +52,17 @@ namespace RevitRoomFinishing.Models {
             return _baseboardTypesByOrder.IndexOf(typeName) + 1;
         }
 
-        public string GetRoomsParameters(string parameterName) {
+        public string GetRoomsParameters(string parameter) {
             IEnumerable<string> values = _rooms
-                .Select(x => x.RevitRoom.GetParamValue<string>(parameterName))
+                .Select(x => x.RevitRoom.GetParamValue<string>(parameter))
+                .Distinct();
+
+            return string.Join("; ", values);
+        }
+
+        public string GetRoomsParameters(BuiltInParameter bltnParam) {
+            IEnumerable<string> values = _rooms
+                .Select(x => x.RevitRoom.GetParamValue<string>(bltnParam))
                 .Distinct();
 
             return string.Join("; ", values);
