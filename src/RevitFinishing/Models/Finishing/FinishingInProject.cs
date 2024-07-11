@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Autodesk.Revit.DB;
 
@@ -20,11 +17,11 @@ namespace RevitFinishing.Models
         private readonly IReadOnlyCollection<Element> _baseboards;
         private readonly IReadOnlyCollection<Element> _allFinishing;
 
-        public FinishingInProject(RevitRepository revitRepository, Phase selectedPhase) {
-            _walls = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Walls, selectedPhase).ToList();
-            _floors = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Floors, selectedPhase).ToList();
-            _ceilings = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Ceilings, selectedPhase).ToList();
-            _baseboards = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Baseboards, selectedPhase).ToList();
+        public FinishingInProject(RevitRepository revitRepository, Phase phase) {
+            _walls = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Walls, phase).ToList();
+            _floors = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Floors, phase).ToList();
+            _ceilings = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Ceilings, phase).ToList();
+            _baseboards = revitRepository.GetFinishingElementsOnPhase(FinishingCategory.Baseboards, phase).ToList();
 
             _allFinishing = _walls
                 .Concat(_baseboards)

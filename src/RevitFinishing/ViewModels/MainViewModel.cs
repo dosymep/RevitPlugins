@@ -6,7 +6,6 @@ using System.Windows.Input;
 using Autodesk.Revit.DB;
 
 using dosymep.Revit;
-using dosymep.SimpleServices;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
