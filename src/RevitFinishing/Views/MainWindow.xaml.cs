@@ -19,14 +19,14 @@ namespace RevitFinishing.Views {
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e) {
-            ChangeSelected(true);
+            ChangeSelected();
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
-            ChangeSelected(false);
+            ChangeSelected();
         }
 
-        private void ChangeSelected(bool state) {
+        private void ChangeSelected() {
             var listBox = (ListBox) FindName("RoomGroups");
             var groups = listBox.SelectedItems;
             //foreach(RoomGroupViewModel group in groups) {
