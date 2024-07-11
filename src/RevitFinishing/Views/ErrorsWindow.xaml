@@ -1,0 +1,78 @@
+﻿<Window x:Class="RevitFinishing.Views.ErrorsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RevitFinishing.Views"
+        mc:Ignorable="d"
+        Title="ErrorsWindow"
+        Height="500" Width="1000"
+        MinHeight="500" MinWidth="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.35*"/>
+            <ColumnDefinition Width="0.65*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView
+            Grid.Column="0"
+            Margin="10"
+            ItemsSource="{Binding ErrorLists}"
+            SelectedItem="{Binding SelectedList}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        Header="Тип"
+                        Width="120"
+                        DisplayMemberBinding="{Binding Message}"/>
+                    <GridViewColumn
+                        Header="Описание"
+                        Width="210">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    TextWrapping="Wrap"
+                                    Text="{Binding Description}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView
+            Grid.Column="1"
+            Margin="10"
+            DataContext="{Binding SelectedList}"
+            ItemsSource="{Binding Elements}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn
+                        Header="ID"
+                        Width="70"
+                        DisplayMemberBinding="{Binding ElementId}"/>
+                    <GridViewColumn
+                        Header="Категория"
+                        Width="90"
+                        DisplayMemberBinding="{Binding CategoryName}"/>
+                    <GridViewColumn
+                        Header="Наименование"
+                        Width="160"
+                        DisplayMemberBinding="{Binding ElementName}"/>
+                    <GridViewColumn
+                        Header="Уровень"
+                        Width="160"
+                        DisplayMemberBinding="{Binding LevelName}"/>
+                    <GridViewColumn
+                        Header="Стадия"
+                        Width="150"
+                        DisplayMemberBinding="{Binding PhaseName}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
