@@ -62,12 +62,11 @@ namespace RevitFinishing.ViewModels {
         }
 
         private void CalculateFinishing() {
-            FinishingInProject finishing = new FinishingInProject(_revitRepository, SelectedPhase);
-
             IEnumerable<Element> selectedRooms = Rooms
                 .Where(x => x.IsChecked)
                 .SelectMany(x => x.Elements);
 
+            FinishingInProject finishing = new FinishingInProject(_revitRepository, SelectedPhase);
             FinishingCalculator calculator = new FinishingCalculator(selectedRooms, finishing, SelectedPhase);
 
             if(calculator.ErrorElements.ErrorLists.Any()) {
@@ -104,7 +103,7 @@ namespace RevitFinishing.ViewModels {
                 return false;
             }
 
-            ErrorText = null;
+            ErrorText = "";
             return true;
         }
 
