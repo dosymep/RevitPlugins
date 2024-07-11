@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Пример перевода на японский язык (google translate) -->
+    
+    <system:String x:Key="MainWindow.Title">コマンド例</system:String>
+    <system:String x:Key="MainWindow.Hello">こんにちは Revit!</system:String>
+    <system:String x:Key="MainWindow.HelloCheck">保存するプロパティの値を入力します。</system:String>
+    
+    <system:String x:Key="MainWindow.ButtonOk">OK</system:String>
+    <system:String x:Key="MainWindow.ButtonCancel">キャンセル</system:String>
+</ResourceDictionary>

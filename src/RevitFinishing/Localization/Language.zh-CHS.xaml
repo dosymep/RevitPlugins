@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Пример перевода на китайский упрощенный язык (google translate) -->
+    
+    <system:String x:Key="MainWindow.Title">命令示例</system:String>
+    <system:String x:Key="MainWindow.Hello">你好 Revit!</system:String>
+    <system:String x:Key="MainWindow.HelloCheck">输入要保存的属性的值。</system:String>
+    
+    <system:String x:Key="MainWindow.ButtonOk">OK</system:String>
+    <system:String x:Key="MainWindow.ButtonCancel">取消</system:String>
+</ResourceDictionary>

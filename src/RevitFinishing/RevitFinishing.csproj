@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <UseDevExpress>true</UseDevExpress>
+    </PropertyGroup>
+</Project>

@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Пример перевода на польский язык (google translate) -->
+    
+    <system:String x:Key="MainWindow.Title">Przykładowe polecenie</system:String>
+    <system:String x:Key="MainWindow.Hello">Cześć Revit!</system:String>
+    <system:String x:Key="MainWindow.HelloCheck">Wprowadź wartość właściwości do zapisania.</system:String>
+    
+    <system:String x:Key="MainWindow.ButtonOk">OK</system:String>
+    <system:String x:Key="MainWindow.ButtonCancel">Anulować</system:String>
+</ResourceDictionary>

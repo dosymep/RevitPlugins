@@ -1,0 +1,14 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Пример перевода на чешский язык (google translate) -->
+    
+    <system:String x:Key="MainWindow.Title">Příklad příkazu</system:String>
+    <system:String x:Key="MainWindow.Hello">Ahoj Revit!</system:String>
+    <system:String x:Key="MainWindow.HelloCheck">Zadejte hodnotu vlastnosti, kterou chcete uložit.</system:String>
+    
+    
+    <system:String x:Key="MainWindow.ButtonOk">OK</system:String>
+    <system:String x:Key="MainWindow.ButtonCancel">Zrušit</system:String>
+</ResourceDictionary>
