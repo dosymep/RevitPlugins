@@ -30,6 +30,10 @@ namespace RevitRoomFinishing.ViewModels {
             _pluginConfig = pluginConfig;
             _revitRepository = revitRepository;
 
+            ProjectSettingsLoader settings = new ProjectSettingsLoader(_revitRepository.Application, _revitRepository.Document);
+            settings.CopyKeySchedule();
+            settings.CopyParameters();
+
             _phases = _revitRepository.GetPhases(); 
             SelectedPhase = _phases[_phases.Count - 1];
 
