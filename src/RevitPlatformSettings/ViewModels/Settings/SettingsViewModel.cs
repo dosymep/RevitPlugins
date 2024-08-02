@@ -1,6 +1,6 @@
 ﻿using dosymep.WPF.ViewModels;
 
-namespace RevitPlatformSettings.ViewModels {
+namespace RevitPlatformSettings.ViewModels.Settings {
     internal class SettingsViewModel : BaseViewModel {
         public SettingsViewModel(int id, int parentId, string settingsName) {
             Id = id;

@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:vms="clr-namespace:RevitPlatformSettings.ViewModels">
-    <DataTemplate DataType="{x:Type vms:SettingsViewModel}">
+                    xmlns:vms="clr-namespace:RevitPlatformSettings.ViewModels"
+                    xmlns:settings="clr-namespace:RevitPlatformSettings.ViewModels.Settings">
+    <DataTemplate DataType="{x:Type settings:SettingsViewModel}">
         <TextBlock
             HorizontalAlignment="Center"
             VerticalAlignment="Center"

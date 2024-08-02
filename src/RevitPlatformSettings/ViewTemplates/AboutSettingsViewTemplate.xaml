@@ -1,0 +1,62 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:settings="clr-namespace:RevitPlatformSettings.ViewModels.Settings"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys"
+                    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:views="clr-namespace:RevitPlatformSettings.Views"
+                    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+    <DataTemplate DataType="{x:Type settings:AboutSettingsViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                Height="200"
+                Margin="10"
+                VerticalAlignment="Top"
+                Source="{Binding Path=ImagePath}" />
+
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                <TextBlock
+                    FontSize="50"
+                    Text="{Binding Path=PlatformName}" />
+
+                <TextBlock
+                    Margin="0 15"
+                    Foreground="Gray"
+                    TextWrapping="Wrap"
+                    Text="{Binding PlatformDescription}" />
+
+                <views:HyperLinkEditWithImage
+                    EditValue="{DynamicResource AboutSettings.PlatformLinkText}"
+                    NavigationUrl="{Binding Path=PlatformPageUrl}"
+                    ImageSource="{Binding Path=ImagePath}" />
+
+                <views:HyperLinkEditWithImage
+                    EditValue="{DynamicResource AboutSettings.PlatformNewsChannel}"
+                    NavigationUrl="{Binding Path=NewsChatUrl}"
+                    ImageSource="{dx:QualifiedImage Uri=../assets/icons8-news-96.png}" />
+
+                <views:HyperLinkEditWithImage
+                    EditValue="{DynamicResource AboutSettings.PlatformMainChat}"
+                    NavigationUrl="{Binding Path=MainChatUrl}"
+                    ImageSource="{dx:QualifiedImage Uri=../assets/icons8-message-96.png}" />
+
+                <views:HyperLinkEditWithImage
+                    EditValue="{DynamicResource AboutSettings.PlatformDownload}"
+                    NavigationUrl="{Binding Path=DownloadLinkUrl}"
+                    ImageSource="{dx:QualifiedImage Uri=../assets/icons8-download-96.png}" />
+
+                <views:HyperLinkEditWithImage
+                    EditValue="{DynamicResource AboutSettings.OpenSource}"
+                    ImageSource="{dx:QualifiedImage Uri=../assets/icons8-github-96.png}"
+                    Command="{Binding ShowOpenSourceDialogCommand}" />
+
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

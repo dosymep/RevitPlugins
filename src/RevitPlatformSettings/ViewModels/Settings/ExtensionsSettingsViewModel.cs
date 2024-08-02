@@ -6,7 +6,7 @@ using RevitPlatformSettings.Factories;
 using RevitPlatformSettings.Model;
 using RevitPlatformSettings.Services;
 
-namespace RevitPlatformSettings.ViewModels {
+namespace RevitPlatformSettings.ViewModels.Settings {
     internal class ExtensionsSettingsViewModel : SettingsViewModel {
         private readonly IExtensionViewModelFactory _extensionFactory;
         private readonly IExtensionsService<BuiltinExtension> _builtinService;

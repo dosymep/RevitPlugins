@@ -2,4 +2,25 @@
     <PropertyGroup>
         <UseDevExpress>true</UseDevExpress>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Serilog" Version="2.10.0">
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    
+    
+    <ItemGroup>
+
+        <Resource Include="assets\theme-win10dark\icons8-download-96.png" />
+        <Resource Include="assets\theme-win10dark\icons8-message-96.png" />
+        <Resource Include="assets\theme-win10dark\icons8-news-96.png" />
+        <Resource Include="assets\theme-win10dark\icons8-github-96.png" />
+
+        <Resource Include="assets\theme-win10light\icons8-download-96.png" />
+        <Resource Include="assets\theme-win10light\icons8-message-96.png" />
+        <Resource Include="assets\theme-win10light\icons8-news-96.png" />
+        <Resource Include="assets\theme-win10light\icons8-github-96.png" />
+    </ItemGroup>
 </Project>

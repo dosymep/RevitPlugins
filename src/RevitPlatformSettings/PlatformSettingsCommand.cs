@@ -6,6 +6,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
 
 using dosymep.Bim4Everyone;
+using dosymep.Bim4Everyone.SimpleServices;
 using dosymep.SimpleServices;
 using dosymep.WPF.Views;
 using dosymep.Xpf.Core.Ninject;
@@ -16,6 +17,7 @@ using RevitPlatformSettings.Factories;
 using RevitPlatformSettings.Model;
 using RevitPlatformSettings.Services;
 using RevitPlatformSettings.ViewModels;
+using RevitPlatformSettings.ViewModels.Settings;
 using RevitPlatformSettings.Views;
 
 using Application = Autodesk.Revit.ApplicationServices.Application;
@@ -32,7 +34,7 @@ namespace RevitPlatformSettings {
         }
 
         public bool? OpenSettingsWindow(UIApplication uiApplication) {
-            using(IKernel kernel = new StandardKernel()) {
+            using(IKernel kernel = uiApplication.CreatePlatformServices()) {
                 kernel.Bind<UIApplication>()
                     .ToConstant(uiApplication)
                     .InTransientScope();
@@ -66,7 +68,10 @@ namespace RevitPlatformSettings {
                     .To<SettingsViewModelFactory>();
 
                 kernel.Bind<SettingsViewModel>().ToSelf();
+                kernel.Bind<GeneralSettingsViewModel>().ToSelf();
                 kernel.Bind<ExtensionsSettingsViewModel>().ToSelf();
+                kernel.Bind<RevitParamsSettingsViewModel>().ToSelf();
+                kernel.Bind<AboutSettingsViewModel>().ToSelf();
 
                 kernel.Bind<MainViewModel>().ToSelf()
                     .InSingletonScope();

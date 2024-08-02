@@ -6,6 +6,7 @@ using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
 using RevitPlatformSettings.Factories;
+using RevitPlatformSettings.ViewModels.Settings;
 
 namespace RevitPlatformSettings.ViewModels {
     internal class MainViewModel : BaseViewModel {
@@ -50,11 +51,20 @@ namespace RevitPlatformSettings.ViewModels {
                 _settingsViewModelFactory.Create<SettingsViewModel>(0, 0, 
                     _localizationService.GetLocalizedString("SettingsNode.Title")),
                 
-                _settingsViewModelFactory.Create<ExtensionsSettingsViewModel>(1, 0, 
+                _settingsViewModelFactory.Create<GeneralSettingsViewModel>(1, 0, 
+                    _localizationService.GetLocalizedString("GeneralSettings.Title")),
+                
+                _settingsViewModelFactory.Create<ExtensionsSettingsViewModel>(2, 0, 
                     _localizationService.GetLocalizedString("ExtensionSettings.Title")),
                 
-                _settingsViewModelFactory.Create<RevitParamsSettingsViewModel>(2, 0, 
+                _settingsViewModelFactory.Create<RevitParamsSettingsViewModel>(3, 0, 
                     _localizationService.GetLocalizedString("RevitParamsSettings.Title")),
+                
+                _settingsViewModelFactory.Create<TelemetrySettingsViewModel>(4, 0, 
+                    _localizationService.GetLocalizedString("TelemetrySettings.Title")),
+                
+                _settingsViewModelFactory.Create<AboutSettingsViewModel>(5, 0, 
+                    _localizationService.GetLocalizedString("AboutSettings.Title")),
             };
 
             Setting = Settings[1];

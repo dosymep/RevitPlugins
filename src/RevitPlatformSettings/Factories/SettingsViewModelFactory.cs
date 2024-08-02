@@ -3,6 +3,7 @@ using Ninject.Parameters;
 using Ninject.Syntax;
 
 using RevitPlatformSettings.ViewModels;
+using RevitPlatformSettings.ViewModels.Settings;
 
 namespace RevitPlatformSettings.Factories {
     internal class SettingsViewModelFactory : ISettingsViewModelFactory {

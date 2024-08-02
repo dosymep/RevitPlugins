@@ -1,0 +1,31 @@
+<UserControl x:Class="RevitPlatformSettings.Views.CustomEditControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:RevitPlatformSettings.Views"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+
+             Margin="5"
+             
+             x:Name="_this"
+             mc:Ignorable="d"
+             d:DesignHeight="50" d:DesignWidth="300">
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Column="0"
+            VerticalAlignment="Center"
+            Text="{Binding Path=EditText, ElementName=_this}" />
+
+        <ContentControl
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Content="{Binding Path=EditControl, ElementName=_this}" />
+    </Grid>
+</UserControl>

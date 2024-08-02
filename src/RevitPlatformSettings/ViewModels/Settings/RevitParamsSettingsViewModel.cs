@@ -6,7 +6,7 @@ using dosymep.Bim4Everyone;
 using dosymep.Bim4Everyone.ProjectParams;
 using dosymep.Bim4Everyone.SharedParams;
 
-namespace RevitPlatformSettings.ViewModels {
+namespace RevitPlatformSettings.ViewModels.Settings {
     internal class RevitParamsSettingsViewModel : SettingsViewModel {
         public RevitParamsSettingsViewModel(int id, int parentId, string settingsName)
             : base(id, parentId, settingsName) {

@@ -7,6 +7,43 @@
     
     <system:String x:Key="MainWindow.ButtonOk">OK</system:String>
     <system:String x:Key="MainWindow.ButtonCancel">Cancel</system:String>
+    
+    <system:String x:Key="GeneralSettings.Title">General</system:String>
+    
+    <system:String x:Key="GeneralSettings.CorpSettings">Corp settings</system:String>
+    <system:String x:Key="GeneralSettings.CorpName">Corp settings name</system:String>
+    <system:String x:Key="GeneralSettings.SettingsPath">Path to corp settings</system:String>
+    <system:String x:Key="GeneralSettings.SettingsImagePath">Path to corp settings image</system:String>
+    
+    <system:String x:Key="GeneralSettings.AppearanceSettings">Appearance</system:String>
+    <system:String x:Key="GeneralSettings.HostTheme">Theme</system:String>
+    <system:String x:Key="GeneralSettings.HostLanguage">Language</system:String>
+    
+    <system:String x:Key="TelemetrySettings.Title">Telemetry</system:String>
+    <system:String x:Key="TelemetrySettings.LogTrace">Trace</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceIsActive">Enable</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceLogLevel">Trace level</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceServerName">Server URL</system:String>
+    
+    <system:String x:Key="TelemetrySettings.LogTraceJournal">Journal Revit</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalIsActive">Enable</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalUseUtc">Use UTC time stamp</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalLogLevel">Journal level logging</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalOutputTemplate">Template journal logging</system:String>
+    
+    <system:String x:Key="GeneralSettings.Notification">Notifications</system:String>
+    <system:String x:Key="GeneralSettings.NotificationIsActive">Enable</system:String>
+    <system:String x:Key="GeneralSettings.NotificationVisibleMaxCount">Count</system:String>
+    <system:String x:Key="GeneralSettings.NotificationScreen">Main screen</system:String>
+    <system:String x:Key="GeneralSettings.NotificationPosition">Position on screen</system:String>
+    
+    <system:String x:Key="AboutSettings.Title">About</system:String>
+    <system:String x:Key="AboutSettings.OpenSource">Third-party Software</system:String>
+    <system:String x:Key="AboutSettings.PlatformDescription">{0} is a platform created to simplify the development of design documentation in Autodesk Revit.</system:String>
+    <system:String x:Key="AboutSettings.PlatformLinkText">Project website</system:String>
+    <system:String x:Key="AboutSettings.PlatformNewsChannel">News channel</system:String>
+    <system:String x:Key="AboutSettings.PlatformMainChat">Main group chat</system:String>
+    <system:String x:Key="AboutSettings.PlatformDownload">Download platform setup</system:String>
 
     <system:String x:Key="ExtensionSettings.Title">Extensions</system:String>
     <system:String x:Key="ExtensionSettings.CategoryGridColumn">Category</system:String>
@@ -19,4 +56,25 @@
     <system:String x:Key="RevitParamsSettings.StorageTypeGridColumn">StorageType</system:String>
     
     <system:String x:Key="SettingsView.Prompt">Please select settings in left.</system:String>
+    
+    <system:String x:Key="OpenSourceWindow.Title">Third-party Software</system:String>
+    <system:String x:Key="OpenSourceWindow.ButtonCancel">Close</system:String>
+    <system:String x:Key="OpenSourceWindow.ItemType">Type</system:String>
+    <system:String x:Key="OpenSourceWindow.Author">Author</system:String>
+    <system:String x:Key="OpenSourceWindow.Software">Software</system:String>
+    <system:String x:Key="OpenSourceWindow.License">License</system:String>
+    
+    <system:String x:Key="OpenSourceWindow.SiteType">Sites</system:String>
+    <system:String x:Key="OpenSourceWindow.ToolType">Tools</system:String>
+    <system:String x:Key="OpenSourceWindow.LibraryType">Libraries</system:String>
+    
+    <system:String x:Key="OpenSourceWindow.FreeLicense">Free License</system:String>
+    <system:String x:Key="OpenSourceWindow.CommunityLicense">Community License</system:String>
+    <system:String x:Key="OpenSourceWindow.MITLicense">MIT License</system:String>
+    <system:String x:Key="OpenSourceWindow.GNULicense">GNU GPLv3 License</system:String>
+    <system:String x:Key="OpenSourceWindow.ApacheLicense">Apache License 2.0</system:String>
+    <system:String x:Key="OpenSourceWindow.RiderLicense">Rider License</system:String>
+    <system:String x:Key="OpenSourceWindow.DevExpressLicense">DevExpress License</system:String>
+    <system:String x:Key="OpenSourceWindow.OpenSourceLicense">OpenSource License</system:String>
+    <system:String x:Key="OpenSourceWindow.OnlineDocumentation">Online Documentation</system:String>
 </ResourceDictionary>

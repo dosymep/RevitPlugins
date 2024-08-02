@@ -8,6 +8,44 @@
     <system:String x:Key="MainWindow.ButtonOk">ОК</system:String>
     <system:String x:Key="MainWindow.ButtonCancel">Отмена</system:String>
     
+    <system:String x:Key="GeneralSettings.Title">Основные</system:String>
+    
+    <system:String x:Key="GeneralSettings.CorpSettings">Корпоративные настройки</system:String>
+    <system:String x:Key="GeneralSettings.CorpName">Имя настроек</system:String>
+    <system:String x:Key="GeneralSettings.SettingsPath">Путь до корпоративных настроек</system:String>
+    <system:String x:Key="GeneralSettings.SettingsImagePath">Путь до корпоративного изображения</system:String>
+    
+    <system:String x:Key="GeneralSettings.AppearanceSettings">Внешний вид</system:String>
+    <system:String x:Key="GeneralSettings.HostTheme">Тема интерфейса</system:String>
+    <system:String x:Key="GeneralSettings.HostLanguage">Используемый язык</system:String>
+    
+    <system:String x:Key="TelemetrySettings.Title">Телеметрия</system:String>
+    <system:String x:Key="TelemetrySettings.LogTrace">Трассировка</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceIsActive">Включить</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceLogLevel">Уровень трассировки</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceServerName">URL сервера</system:String>
+    
+    <system:String x:Key="TelemetrySettings.LogTraceJournal">Журнал Revit</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalIsActive">Включить</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalUseUtc">Использовать часовой пояс UTC</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalLogLevel">Уровень журналирования</system:String>
+    <system:String x:Key="TelemetrySettings.LogTraceJournalOutputTemplate">Шаблон событий журналирования</system:String>
+    
+    
+    <system:String x:Key="GeneralSettings.Notification">Уведомления</system:String>
+    <system:String x:Key="GeneralSettings.NotificationIsActive">Включить</system:String>
+    <system:String x:Key="GeneralSettings.NotificationVisibleMaxCount">Количество</system:String>
+    <system:String x:Key="GeneralSettings.NotificationScreen">Основной экран</system:String>
+    <system:String x:Key="GeneralSettings.NotificationPosition">Позиция на экране</system:String>
+    
+    <system:String x:Key="AboutSettings.Title">О программе</system:String>
+    <system:String x:Key="AboutSettings.OpenSource">Стороннее ПО</system:String>
+    <system:String x:Key="AboutSettings.PlatformDescription">{0} - это платформа созданная для упрощения разработки проектной документации в Autodesk Revit.</system:String>
+    <system:String x:Key="AboutSettings.PlatformLinkText">Ссылка на проект</system:String>
+    <system:String x:Key="AboutSettings.PlatformNewsChannel">Канал новостей</system:String>
+    <system:String x:Key="AboutSettings.PlatformMainChat">Обсуждение платформы</system:String>
+    <system:String x:Key="AboutSettings.PlatformDownload">Загрузка установщика платформы</system:String>
+    
     <system:String x:Key="ExtensionSettings.Title">Расширения</system:String>
     <system:String x:Key="ExtensionSettings.CategoryGridColumn">Категория</system:String>
     <system:String x:Key="ExtensionSettings.NameGridColumn">Имя</system:String>
@@ -19,4 +57,27 @@
     <system:String x:Key="RevitParamsSettings.StorageTypeGridColumn">StorageType</system:String>
     
     <system:String x:Key="SettingsView.Prompt">Выберите настройки слева в дереве.</system:String>
+    
+    
+    <system:String x:Key="OpenSourceWindow.Title">Стороннее ПО</system:String>
+    <system:String x:Key="OpenSourceWindow.ButtonCancel">Выход</system:String>
+    <system:String x:Key="OpenSourceWindow.ItemType">Тип</system:String>
+    <system:String x:Key="OpenSourceWindow.Author">Автор</system:String>
+    <system:String x:Key="OpenSourceWindow.Software">Програмное обеспечение</system:String>
+    <system:String x:Key="OpenSourceWindow.License">Лицензионное соглашение</system:String>
+    
+    <system:String x:Key="OpenSourceWindow.SiteType">Сайты</system:String>
+    <system:String x:Key="OpenSourceWindow.ToolType">Инструменты</system:String>
+    <system:String x:Key="OpenSourceWindow.LibraryType">Библиотеки</system:String>
+    
+    <system:String x:Key="OpenSourceWindow.FreeLicense">Бесплатная лицензия</system:String>
+    <system:String x:Key="OpenSourceWindow.CommunityLicense">Лицензия сообщества</system:String>
+    <system:String x:Key="OpenSourceWindow.MITLicense">Лицензия MIT</system:String>
+    <system:String x:Key="OpenSourceWindow.GNULicense">Лицензия GNU GPLv3</system:String>
+    <system:String x:Key="OpenSourceWindow.ApacheLicense">Лицензия Apache v2.0</system:String>
+    <system:String x:Key="OpenSourceWindow.RiderLicense">Лицензия Rider</system:String>
+    <system:String x:Key="OpenSourceWindow.DevExpressLicense">Лицензия DevExpress</system:String>
+    <system:String x:Key="OpenSourceWindow.OpenSourceLicense">Бесплатная OpenSource</system:String>
+    <system:String x:Key="OpenSourceWindow.OnlineDocumentation">Онлайн документация</system:String>
+    
 </ResourceDictionary>

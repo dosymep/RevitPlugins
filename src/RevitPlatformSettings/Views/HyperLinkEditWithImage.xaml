@@ -1,0 +1,38 @@
+<UserControl x:Class="RevitPlatformSettings.Views.HyperLinkEditWithImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:RevitPlatformSettings.Views"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys"
+
+             x:Name="_this"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <dxe:HyperlinkEdit
+        AllowAutoNavigate="True"
+        Command="{Binding Command, ElementName=_this}"
+        EditValue="{Binding EditValue, ElementName=_this}"
+        NavigationUrl="{Binding NavigationUrl, ElementName=_this}">
+        <dxe:HyperlinkEdit.EditTemplate>
+            <ControlTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <Image
+                        Width="20"
+                        Height="20"
+                        Cursor="Hand"
+                        Source="{Binding ImageSource, ElementName=_this}" />
+                    <TextBlock
+                        x:Name="PART_Editor"
+                        FontSize="20"
+                        TextWrapping="{Binding Path=(dxe:BaseEdit.OwnerEdit).TextWrapping, RelativeSource={RelativeSource Self}}"
+                        TextTrimming="{Binding Path=(dxe:BaseEdit.OwnerEdit).TextTrimming, RelativeSource={RelativeSource Self}}"
+                        Style="{DynamicResource {themes:HyperLinkEditThemeKey ResourceKey=TextBlockStyle}}"
+                        dx:FocusHelper2.Focusable="False" />
+                </StackPanel>
+            </ControlTemplate>
+        </dxe:HyperlinkEdit.EditTemplate>
+    </dxe:HyperlinkEdit>
+</UserControl>
