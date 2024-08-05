@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Windows.Controls;
+using System;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 
 using RevitPylonDocumentation.ViewModels;
-
-using View = Autodesk.Revit.DB.View;
 
 namespace RevitPylonDocumentation.Models.PylonSheetNView {
     public class PylonViewSchedulePlacer {

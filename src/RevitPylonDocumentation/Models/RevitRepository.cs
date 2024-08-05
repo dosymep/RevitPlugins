@@ -1,9 +1,5 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web.UI.WebControls;
-using System.Windows.Controls;
 
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.DB;
@@ -71,7 +67,7 @@ namespace RevitPylonDocumentation.Models {
                 .OfClass(typeof(ViewFamilyType))
                 .OfType<ViewFamilyType>()
                 .Where(a => ViewFamily.Section == a.ViewFamily)
-                .ToList();        
+                .ToList();
         /// <summary>
         /// Возвращает список всех легенд, присутствующих в проекте
         /// </summary>
@@ -136,7 +132,7 @@ namespace RevitPylonDocumentation.Models {
             HostProjectSections.Clear();
 
             AnalizePylons(mainViewModel, elems);
-            
+
             // Получаем список разделов в проекте (комплектов документации)
             HostProjectSections = new List<string>(HostsInfo
                 .Select(item => item.ProjectSection)
@@ -208,7 +204,7 @@ namespace RevitPylonDocumentation.Models {
         /// Ищет лист в проекте по информации из оболочки листа пилона PylonSheetInfo
         /// </summary>
         public void FindSheetInPj(MainViewModel mainViewModel, PylonSheetInfo pylonSheetInfo) {
-            
+
             ViewSheet sheet = AllSheets
                 .Where(item => item.Name.Equals(mainViewModel.ProjectSettings.SheetPrefix + pylonSheetInfo.PylonKeyName + mainViewModel.ProjectSettings.SheetSuffix))
                 .FirstOrDefault();
@@ -225,7 +221,7 @@ namespace RevitPylonDocumentation.Models {
         public void FindViewSectionInPj(PylonView pylonView) {
 
             foreach(ViewSection view in AllSectionViews) {
-                
+
                 if(view.Name == pylonView.ViewName) {
                     pylonView.ViewElement = view;
                     break;

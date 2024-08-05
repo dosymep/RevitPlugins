@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Autodesk.Revit.UI;
-
 using dosymep.WPF.ViewModels;
 
 using RevitPylonDocumentation.ViewModels;
 
 namespace RevitPylonDocumentation.Models.UserSettings {
-    class UserViewSectionSettings : BaseViewModel {
+    internal class UserViewSectionSettings : BaseViewModel {
 
         private string _generalViewPrefixTemp = "";
         private string _generalViewSuffixTemp = "";

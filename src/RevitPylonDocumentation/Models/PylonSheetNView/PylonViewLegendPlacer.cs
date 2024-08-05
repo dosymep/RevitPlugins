@@ -1,17 +1,8 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Windows.Controls;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 
 using RevitPylonDocumentation.ViewModels;
-
-using View = Autodesk.Revit.DB.View;
 
 namespace RevitPylonDocumentation.Models.PylonSheetNView {
     public class PylonViewLegendPlacer {
@@ -41,7 +32,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
 
                 // Заполняем данные для задания
                 SheetInfo.LegendView.ViewportTypeName = "Без названия";
-                
+
                 double coordinateX = UnitUtilsHelper.ConvertToInternalValue(int.Parse(ViewModel.ProjectSettings.LegendXOffset));
                 double coordinateY = UnitUtilsHelper.ConvertToInternalValue(int.Parse(ViewModel.ProjectSettings.LegendYOffset));
 

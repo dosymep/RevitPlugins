@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using RevitPylonDocumentation.Models.UserSettings;
 using RevitPylonDocumentation.ViewModels;
 
@@ -47,9 +41,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             // Если вдруг по какой-то причине лист не был создан, то создание видов/видовых экранов не выполняем 
             if(SheetInfo.PylonViewSheet is null) { return; }
 
-                                        //////////////////
-                                        // ОСНОВНОЙ ВИД //
-                                        //////////////////
+            //////////////////
+            // ОСНОВНОЙ ВИД //
+            //////////////////
 
             if(selectionSettings.NeedWorkWithGeneralView) {
 
@@ -65,9 +59,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             }
 
 
-                                ///////////////////////////////////
-                                // ОСНОВНОЙ ПЕРПЕНДИКУЛЯРНЫЙ ВИД //
-                                ///////////////////////////////////
+            ///////////////////////////////////
+            // ОСНОВНОЙ ПЕРПЕНДИКУЛЯРНЫЙ ВИД //
+            ///////////////////////////////////
 
             if(selectionSettings.NeedWorkWithGeneralPerpendicularView) {
 
@@ -84,9 +78,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             }
 
 
-                                    ///////////////////////////
-                                    // ПЕРВЫЙ ПОПЕРЕЧНЫЙ ВИД //
-                                    ///////////////////////////
+            ///////////////////////////
+            // ПЕРВЫЙ ПОПЕРЕЧНЫЙ ВИД //
+            ///////////////////////////
 
             if(selectionSettings.NeedWorkWithTransverseViewFirst) {
 
@@ -102,9 +96,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                    ///////////////////////////
-                                    // ВТОРОЙ ПОПЕРЕЧНЫЙ ВИД //
-                                    ///////////////////////////
+            ///////////////////////////
+            // ВТОРОЙ ПОПЕРЕЧНЫЙ ВИД //
+            ///////////////////////////
 
             if(selectionSettings.NeedWorkWithTransverseViewSecond) {
 
@@ -120,9 +114,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                    ///////////////////////////
-                                    // ТРЕТИЙ ПОПЕРЕЧНЫЙ ВИД //
-                                    ///////////////////////////
+            ///////////////////////////
+            // ТРЕТИЙ ПОПЕРЕЧНЫЙ ВИД //
+            ///////////////////////////
 
             if(selectionSettings.NeedWorkWithTransverseViewThird) {
 
@@ -138,9 +132,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                    ///////////////////////////
-                                    // СПЕЦИФИКАЦИЯ АРМАТУРЫ //
-                                    ///////////////////////////
+            ///////////////////////////
+            // СПЕЦИФИКАЦИЯ АРМАТУРЫ //
+            ///////////////////////////
 
             if(selectionSettings.NeedWorkWithRebarSchedule) {
 
@@ -156,9 +150,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                    /////////////////////////////
-                                    // СПЕЦИФИКАЦИЯ МАТЕРИАЛОВ //
-                                    /////////////////////////////
+            /////////////////////////////
+            // СПЕЦИФИКАЦИЯ МАТЕРИАЛОВ //
+            /////////////////////////////
 
             if(selectionSettings.NeedWorkWithMaterialSchedule) {
 
@@ -174,9 +168,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                    /////////////////////////////////
-                                    // ВЕДОМОСТЬ СИСТЕМНЫХ ДЕТАЛЕЙ //
-                                    /////////////////////////////////
+            /////////////////////////////////
+            // ВЕДОМОСТЬ СИСТЕМНЫХ ДЕТАЛЕЙ //
+            /////////////////////////////////
 
             if(selectionSettings.NeedWorkWithSystemPartsSchedule) {
 
@@ -192,9 +186,9 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
                 // Тут точно получили вид
             }
 
-                                        ///////////////////////////
-                                        // ВЕДОМОСТЬ IFC ДЕТАЛЕЙ //
-                                        ///////////////////////////
+            ///////////////////////////
+            // ВЕДОМОСТЬ IFC ДЕТАЛЕЙ //
+            ///////////////////////////
 
             if(selectionSettings.NeedWorkWithIFCPartsSchedule) {
 

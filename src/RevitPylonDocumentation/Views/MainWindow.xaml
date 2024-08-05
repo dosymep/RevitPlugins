@@ -25,7 +25,7 @@
 
     d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=False}"
     x:Name="window"
-    Loaded="window_Loaded">
+    Loaded="Window_Loaded">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
+using System;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 
 using dosymep.Revit;
 
 using RevitPylonDocumentation.ViewModels;
-
-using Parameter = Autodesk.Revit.DB.Parameter;
 
 namespace RevitPylonDocumentation.Models.PylonSheetNView {
     public class PylonViewSectionCreator {
@@ -29,7 +21,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
 
 
 
-        public bool TryCreateGeneralView(ViewFamilyType SelectedViewFamilyType) {
+        public bool TryCreateGeneralView(ViewFamilyType selectedViewFamilyType) {
 
             // Потом сделать выбор через уникальный идентификатор (или сделать подбор раньше)
             int count = 0;
@@ -86,7 +78,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             ViewSection viewSection = null;
 
             try {
-                viewSection = ViewSection.CreateSection(Repository.Document, SelectedViewFamilyType.Id, sectionBox);
+                viewSection = ViewSection.CreateSection(Repository.Document, selectedViewFamilyType.Id, sectionBox);
 
                 if(viewSection != null) {
                     viewSection.Name = ViewModel.ViewSectionSettings.GeneralViewPrefix + SheetInfo.PylonKeyName + ViewModel.ViewSectionSettings.GeneralViewSuffix;
@@ -112,7 +104,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
 
 
 
-        public bool TryCreateGeneralPerpendicularView(ViewFamilyType SelectedViewFamilyType) {
+        public bool TryCreateGeneralPerpendicularView(ViewFamilyType selectedViewFamilyType) {
 
             // Потом сделать выбор через уникальный идентификатор (или сделать подбор раньше)
             int count = 0;
@@ -174,7 +166,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             ViewSection viewSection = null;
 
             try {
-                viewSection = ViewSection.CreateSection(Repository.Document, SelectedViewFamilyType.Id, sectionBox);
+                viewSection = ViewSection.CreateSection(Repository.Document, selectedViewFamilyType.Id, sectionBox);
 
                 if(viewSection != null) {
                     viewSection.Name = ViewModel.ViewSectionSettings.GeneralViewPerpendicularPrefix + SheetInfo.PylonKeyName + ViewModel.ViewSectionSettings.GeneralViewPerpendicularSuffix;
@@ -197,7 +189,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
         }
 
 
-        public bool TryCreateTransverseView(ViewFamilyType SelectedViewFamilyType, int transverseViewNum) {
+        public bool TryCreateTransverseView(ViewFamilyType selectedViewFamilyType, int transverseViewNum) {
 
             // Потом сделать выбор через уникальный идентификатор (или сделать подбор раньше)
             int count = 0;
@@ -276,7 +268,7 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
             ViewSection viewSection = null;
 
             try {
-                viewSection = ViewSection.CreateSection(Repository.Document, SelectedViewFamilyType.Id, sectionBox);
+                viewSection = ViewSection.CreateSection(Repository.Document, selectedViewFamilyType.Id, sectionBox);
 
                 if(viewSection != null) {
                     if(transverseViewNum == 1) {

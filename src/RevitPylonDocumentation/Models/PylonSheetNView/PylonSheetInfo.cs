@@ -1,19 +1,8 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Windows.Controls;
-using System.Xml.Linq;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Mechanical;
-using Autodesk.Revit.UI;
 
-using dosymep.Bim4Everyone.ProjectConfigs;
-using dosymep.Revit;
-using dosymep.WPF;
 using dosymep.WPF.ViewModels;
 
 using RevitPylonDocumentation.ViewModels;
@@ -23,7 +12,7 @@ using Parameter = Autodesk.Revit.DB.Parameter;
 using View = Autodesk.Revit.DB.View;
 
 namespace RevitPylonDocumentation.Models.PylonSheetNView {
-    class PylonSheetInfo : BaseViewModel {
+    internal class PylonSheetInfo : BaseViewModel {
 
         private bool _isCheck = false;
 

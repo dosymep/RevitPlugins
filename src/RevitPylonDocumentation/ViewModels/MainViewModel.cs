@@ -1,31 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
-using System.Runtime;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
-using Autodesk.AdvanceSteel.CADAccess;
-using Autodesk.AdvanceSteel.Modelling;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Electrical;
-using Autodesk.Revit.DB.Structure;
-using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+
 using dosymep.Revit;
-using dosymep.SimpleServices;
 using dosymep.WPF.Commands;
 using dosymep.WPF.ViewModels;
 
@@ -34,9 +18,6 @@ using RevitPylonDocumentation.Models.PylonSheetNView;
 using RevitPylonDocumentation.Models.UserSettings;
 using RevitPylonDocumentation.Views;
 
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
-
-using Line = Autodesk.Revit.DB.Line;
 using Transaction = Autodesk.Revit.DB.Transaction;
 using View = Autodesk.Revit.DB.View;
 
@@ -55,7 +36,7 @@ namespace RevitPylonDocumentation.ViewModels {
         private FamilySymbol _selectedTitleBlock;
         private List<PylonSheetInfo> _selectedHostsInfo = new List<PylonSheetInfo>();
 
-        public bool _settingsEdited = false;
+        private bool _settingsEdited = false;
 
         private string _hostsInfoFilter;
         private ICollectionView _hostsInfoView;
@@ -391,7 +372,7 @@ namespace RevitPylonDocumentation.ViewModels {
                 SelectedProjectSection = string.Empty;
                 _pylonSelectedManually = true;
 
-                _revitRepository.GetHostData(this, new List<Element> {element});
+                _revitRepository.GetHostData(this, new List<Element> { element });
 
                 HostsInfo = new ObservableCollection<PylonSheetInfo>(_revitRepository.HostsInfo);
                 ProjectSections = new ObservableCollection<string>(_revitRepository.HostProjectSections);

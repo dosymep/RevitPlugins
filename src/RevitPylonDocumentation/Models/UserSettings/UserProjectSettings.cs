@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
 
-using dosymep.Bim4Everyone.ProjectConfigs;
 using dosymep.Revit;
 using dosymep.WPF.ViewModels;
 
@@ -15,7 +9,7 @@ using RevitPylonDocumentation.Models.PylonSheetNView;
 using RevitPylonDocumentation.ViewModels;
 
 namespace RevitPylonDocumentation.Models.UserSettings {
-    class UserProjectSettings : BaseViewModel {
+    internal class UserProjectSettings : BaseViewModel {
 
         private string _projectSectionTemp = "обр_ФОП_Раздел проекта";
         private string _markTemp = "Марка";
@@ -183,7 +177,7 @@ namespace RevitPylonDocumentation.Models.UserSettings {
             if(Repository.AllSectionViews.FirstOrDefault()?.LookupParameter(DispatcherGroupingSecond) is null) {
                 ViewModel.ErrorText = "Наименование параметра диспетчера 2 некорректно";
             }
-            
+
             // Пытаемся проверить спеки
             if(Repository.AllScheduleViews.FirstOrDefault()?.LookupParameter(DispatcherGroupingFirst) is null) {
                 ViewModel.ErrorText = "Наименование параметра диспетчера 1 некорректно";
@@ -191,7 +185,7 @@ namespace RevitPylonDocumentation.Models.UserSettings {
             if(Repository.AllScheduleViews.FirstOrDefault()?.LookupParameter(DispatcherGroupingSecond) is null) {
                 ViewModel.ErrorText = "Наименование параметра диспетчера 2 некорректно";
             }
-            
+
             // Проверяем, чтоб были заданы оффсеты видового экрана легенды
             if(LegendXOffset is null || LegendYOffset is null) {
                 ViewModel.ErrorText = "Не заданы отступы на листе для легенды примечений";

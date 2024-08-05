@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
-
-using Autodesk.Revit.DB;
 
 using Color = Autodesk.Revit.DB.Color;
 
 namespace RevitPylonDocumentation.Models {
     internal class ColorHelper {
-        public ColorHelper(byte R, byte G, byte B) {
-            UserColor= new Color(R, G, B);
-            UserBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(R, G, B));
+        public ColorHelper(byte r, byte g, byte b) {
+            UserColor = new Color(r, g, b);
+            UserBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
         }
 
         public Color UserColor { get; set; }

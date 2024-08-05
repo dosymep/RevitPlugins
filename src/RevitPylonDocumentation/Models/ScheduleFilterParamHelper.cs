@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RevitPylonDocumentation.Models
-{
-    class ScheduleFilterParamHelper
-    {
+namespace RevitPylonDocumentation.Models {
+    internal class ScheduleFilterParamHelper {
         public ScheduleFilterParamHelper(string paramNameInSchedule, string paramNameInHost) {
             ParamNameInSchedule = paramNameInSchedule;
             ParamNameInHost = paramNameInHost;

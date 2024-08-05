@@ -1,14 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-
-using dosymep.Revit;
 
 using RevitPylonDocumentation.ViewModels;
 
@@ -174,21 +168,21 @@ namespace RevitPylonDocumentation.Models.PylonSheetNView {
         /// </summary>
         public void SetScheduleDispatcherParameter(ViewSchedule viewSchedule, string dispGroupingParam, string hostDispGroupingParam) {
 
-            Parameter ScheduleGroupingParameter = viewSchedule.LookupParameter(dispGroupingParam);
-            Parameter HostGroupingParameterValue = SheetInfo.HostElems[0].LookupParameter(hostDispGroupingParam);
+            Parameter scheduleGroupingParameter = viewSchedule.LookupParameter(dispGroupingParam);
+            Parameter hostGroupingParameterValue = SheetInfo.HostElems[0].LookupParameter(hostDispGroupingParam);
 
-            string GroupingParameterValue = string.Empty;
+            string groupingParameterValue = string.Empty;
 
             // Если такого параметра нет, значит просто записываем то, что записал пользователь
-            if(HostGroupingParameterValue is null) {
-                GroupingParameterValue = hostDispGroupingParam;
+            if(hostGroupingParameterValue is null) {
+                groupingParameterValue = hostDispGroupingParam;
             } else {
                 // Иначе получаем значение этого параметра из пилона
-                GroupingParameterValue = HostGroupingParameterValue.AsValueString();
+                groupingParameterValue = hostGroupingParameterValue.AsValueString();
             }
 
-            if(ScheduleGroupingParameter != null && ScheduleGroupingParameter.StorageType == StorageType.String) {
-                ScheduleGroupingParameter.Set(GroupingParameterValue);
+            if(scheduleGroupingParameter != null && scheduleGroupingParameter.StorageType == StorageType.String) {
+                scheduleGroupingParameter.Set(groupingParameterValue);
             }
         }
 
