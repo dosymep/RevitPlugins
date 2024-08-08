@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +26,8 @@ namespace RevitServerFolders.ViewModels.Rs {
         public override bool HasChildren => true;
 
         protected override async Task<IEnumerable<RsModelObjectViewModel>> GetChildrenObjects() {
-            FolderContents folderContents = await _serverClient.GetRootFolderContentsAsync();
+            FolderContents folderContents = await _serverClient.GetRootFolderContentsAsync(
+                CancellationTokenSource.Token);
             return folderContents.Folders
                 .Select(item => new RsFolderDataViewModel(_serverClient, item, folderContents))
                 .ToArray();

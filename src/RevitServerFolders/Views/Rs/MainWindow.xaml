@@ -16,6 +16,7 @@
     mc:Ignorable="d"
     WindowStartupLocation="CenterOwner"
 
+    x:Name="_this"
     Title="MainWindow"
     Height="450" Width="800"
     MinHeight="450" MinWidth="800"
@@ -41,6 +42,36 @@
             Server="{dx:DXImage 'Office2013/Data/Database_16x16.png'}"
             Folder="{dx:DXImage 'Office2013/Support/Product_16x16.png'}"
             OpenedFolder="{dx:DXImage 'Office2013/Support/PackageProduct_16x16.png'}" />
+
+        <Style
+            TargetType="dxg:TreeListControl">
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding DataContext.LoadViewCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="ShowLoadingPanel"
+                        Value="True" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding DataContext.LoadChildrenCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="ShowLoadingPanel"
+                        Value="True" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding DataContext.ReloadChildrenCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="ShowLoadingPanel"
+                        Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter
+                Property="ShowLoadingPanel"
+                Value="False" />
+        </Style>
     </Window.Resources>
 
     <Grid>

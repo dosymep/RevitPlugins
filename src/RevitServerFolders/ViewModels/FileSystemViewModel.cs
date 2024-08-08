@@ -8,11 +8,12 @@ using RevitServerFolders.Models;
 using RevitServerFolders.Services;
 
 namespace RevitServerFolders.ViewModels {
-    internal sealed class RsViewModel : MainViewModel {
-        private readonly RsModelObjectConfig _pluginConfig;
+    internal sealed class FileSystemViewModel : MainViewModel {
+        private readonly FileModelObjectConfig _pluginConfig;
         private readonly IModelsExportService _exportService;
 
-        public RsViewModel(RsModelObjectConfig pluginConfig,
+        public FileSystemViewModel(
+            FileModelObjectConfig pluginConfig,
             IModelObjectService objectService,
             IModelsExportService exportService,
             IOpenFolderDialogService openFolderDialogService,
@@ -20,7 +21,15 @@ namespace RevitServerFolders.ViewModels {
             : base(pluginConfig, objectService, openFolderDialogService, progressDialogFactory) {
             _pluginConfig = pluginConfig;
             _exportService = exportService;
-            IsExportRoomsVisible = false;
+            IsExportRoomsVisible = true;
+        }
+
+        protected override void LoadConfigImpl() {
+            IsExportRooms = _pluginConfig.IsExportRooms;
+        }
+
+        protected override void SaveConfigImpl() {
+            _pluginConfig.IsExportRooms = IsExportRooms;
         }
 
         protected override void AcceptViewImpl() {

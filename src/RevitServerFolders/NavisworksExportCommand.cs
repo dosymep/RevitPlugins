@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 
 using Autodesk.Revit.Attributes;
@@ -27,14 +27,17 @@ namespace RevitServerFolders {
                 kernel.Bind<RevitRepository>()
                     .ToSelf()
                     .InSingletonScope();
-                
+
                 kernel.UseXtraProgressDialog<FileSystemViewModel>();
-                
+
                 kernel.Bind<FileModelObjectConfig>()
                     .ToMethod(c => FileModelObjectConfig.GetPluginConfig());
-                
+
                 kernel.Bind<IModelObjectService>()
                     .To<FileSystemModelObjectService>();
+                kernel.Bind<IModelsExportService>()
+                    .To<NwcExportService>()
+                    .InSingletonScope();
 
                 kernel.UseXtraOpenFolderDialog<MainWindow>(
                     initialDirectory: Environment.GetFolderPath(Environment.SpecialFolder.Desktop));

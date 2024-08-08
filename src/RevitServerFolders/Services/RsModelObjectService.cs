@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,20 +21,22 @@ namespace RevitServerFolders.Services {
             _mainViewModel = mainViewModel;
             _serverClients = serverClients;
         }
-        
+
         public Task<ModelObject> SelectModelObjectDialog() {
             return SelectModelObjectDialog(null);
         }
 
         public Task<ModelObject> SelectModelObjectDialog(string rootFolder) {
-            MainWindow window = new MainWindow() {DataContext = _mainViewModel, Title = "Выберите папку"};
+            _mainViewModel.RemoveCancellation();
+            MainWindow window = new MainWindow() { DataContext = _mainViewModel, Title = "Выберите папку" };
             if(window.ShowDialog() == true) {
                 return Task.FromResult(_mainViewModel.SelectedItem.GetModelObject());
             }
+            _mainViewModel.CancelCommands();
 
             throw new OperationCanceledException();
         }
-        
+
         public async Task<ModelObject> GetFromString(string folderName) {
             Uri uri = new Uri(folderName.Replace(@"\", @"/"));
             IServerClient serverClient = _serverClients.FirstOrDefault(
@@ -52,7 +54,7 @@ namespace RevitServerFolders.Services {
             } else {
                 folderContents = await serverClient.GetFolderContentsAsync(parent);
             }
-            
+
             FolderData folderData = folderContents.Folders
                 .FirstOrDefault(item => item.Name.Equals(currentFolder));
 

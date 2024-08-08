@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 
     xmlns:base="clr-namespace:dosymep.WPF.Views"
+    xmlns:local="clr-namespace:RevitServerFolders.Views"
     xmlns:vms="clr-namespace:RevitServerFolders.ViewModels"
 
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
@@ -14,8 +15,10 @@
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:services="clr-namespace:dosymep.Xpf.Core.SimpleServices;assembly=dosymep.Xpf.Core"
     xmlns:converters="clr-namespace:RevitServerFolders.Converters"
+    xmlns:dosymepConverters="clr-namespace:dosymep.WPF.Converters"
 
     mc:Ignorable="d"
+    x:Name="_this"
     WindowStartupLocation="CenterOwner"
 
     Title="MainWindow"
@@ -42,7 +45,7 @@
     </dxmvvm:Interaction.Behaviors>
 
     <Window.Resources>
-        <dxg:InverseBooleanConverter
+        <dosymepConverters:InverseBooleanConverter
             x:Key="InverseBooleanConverter" />
 
         <BooleanToVisibilityConverter
@@ -51,8 +54,53 @@
         <converters:CellImageConverter
             x:Key="CellImageConverter"
             Empty="{dx:DXImage 'Office2013/Actions/New_16x16.png'}"
-            Model="../Resources/Revit.png"
+            Model="..\Resources\Revit.png"
             Folder="{dx:DXImage 'Office2013/Support/Article_16x16.png'}" />
+
+        <Style
+            TargetType="dxg:GridControl">
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding DataContext.OpenFromFoldersCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="ShowLoadingPanel"
+                        Value="True" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding DataContext.SourceFolderChangedCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="ShowLoadingPanel"
+                        Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter
+                Property="ShowLoadingPanel"
+                Value="False" />
+        </Style>
+        <Style
+            TargetType="dxe:ButtonEdit" x:Key="SourceFolderEditStyle">
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding DataContext.OpenFromFoldersCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="IsEnabled"
+                        Value="False" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding DataContext.SourceFolderChangedCommand.IsExecuting, ElementName=_this}"
+                    Value="True">
+                    <Setter
+                        Property="IsEnabled"
+                        Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter
+                Property="IsEnabled"
+                Value="True" />
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -99,11 +147,12 @@
                 Visibility="{Binding IsExportRoomsVisible, 
                     Converter={StaticResource BooleanToVisibilityConverter}}" />
         </DockPanel>
-        
+
         <dxe:ButtonEdit
             Grid.Row="3"
             x:Name="_sourceFolderEdit"
             Margin="5"
+            Style="{StaticResource SourceFolderEditStyle}"
             AllowDefaultButton="False"
             EditValuePostDelay="250"
             EditValuePostMode="Delayed"
@@ -125,7 +174,6 @@
         <dxg:GridControl
             Grid.Row="4"
             Margin="5"
-            ShowLoadingPanel="{Binding SourceFolderChangedCommand.IsExecuting}"
             ItemsSource="{Binding ModelObjects}"
             SelectedItem="{Binding SelectedObject}">
 
@@ -149,7 +197,7 @@
             </dxg:GridControl.View>
 
             <dxg:GridColumn
-                FieldName="SkipObject"
+                Binding="{Binding SkipObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanConverter}}"
                 Header=""
                 AllowEditing="True"
                 AllowMoving="False"
@@ -164,12 +212,13 @@
                 ShowCheckBoxInHeader="True">
 
                 <dxg:GridColumn.CellTemplate>
-                    <DataTemplate DataType="{x:Type dxg:RowData}">
+                    <DataTemplate>
                         <dxe:CheckEdit
-                            Name="PART_Editor"
-                            EditValue="{Binding Row.SkipObject, 
-                            UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource InverseBooleanConverter}}" />
+                            x:Name="PART_Editor"
+                            EditValue="{Binding RowData.Row.SkipObject, 
+                        UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanConverter}}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center" />
                     </DataTemplate>
                 </dxg:GridColumn.CellTemplate>
 

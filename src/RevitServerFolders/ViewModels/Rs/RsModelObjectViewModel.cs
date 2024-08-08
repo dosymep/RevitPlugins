@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using dosymep.Revit.ServerClient;
 using dosymep.WPF.Commands;
@@ -12,7 +13,7 @@ using RevitServerFolders.Models;
 
 namespace RevitServerFolders.ViewModels.Rs {
     internal class RsModelObjectViewModel : BaseViewModel {
-        protected readonly IServerClient _serverClient;
+        private protected readonly IServerClient _serverClient;
 
         private string _size;
         private ObservableCollection<RsModelObjectViewModel> _children;
@@ -22,14 +23,17 @@ namespace RevitServerFolders.ViewModels.Rs {
 
         protected RsModelObjectViewModel(IServerClient serverClient) {
             _serverClient = serverClient;
+            CancellationTokenSource = new CancellationTokenSource();
 
-            Children = new ObservableCollection<RsModelObjectViewModel>() {null};
+            Children = new ObservableCollection<RsModelObjectViewModel>() { null };
             LoadChildrenCommand = RelayCommand.CreateAsync(LoadChildrenObjects, CanLoadChildrenObjects);
             ReloadChildrenCommand = RelayCommand.CreateAsync(ReLoadChildrenObjects, CanReLoadChildrenObjects);
         }
 
         public AsyncRelayCommand LoadChildrenCommand { get; }
         public AsyncRelayCommand ReloadChildrenCommand { get; }
+
+        protected CancellationTokenSource CancellationTokenSource { get; private set; }
 
         public virtual string Name => "";
         public virtual string FullName => "";
@@ -41,7 +45,7 @@ namespace RevitServerFolders.ViewModels.Rs {
             get => _size;
             set => this.RaiseAndSetIfChanged(ref _size, value);
         }
-        
+
         public bool IsExpanded {
             get => _isExpanded;
             set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
@@ -56,27 +60,42 @@ namespace RevitServerFolders.ViewModels.Rs {
             get => _children;
             set => this.RaiseAndSetIfChanged(ref _children, value);
         }
-        
+
         public virtual ModelObject GetModelObject() {
             return default;
         }
-        
+
+        public void Cancel() {
+            CancellationTokenSource.Cancel(true);
+        }
+
+        public void RemoveCancellation() {
+            CancellationTokenSource = new CancellationTokenSource();
+        }
+
         protected virtual Task<IEnumerable<RsModelObjectViewModel>> GetChildrenObjects() {
             return Task.FromResult(Enumerable.Empty<RsModelObjectViewModel>());
         }
-        
+
         private async Task LoadChildrenObjects() {
+            bool isCancelled = false;
             try {
                 Children = new ObservableCollection<RsModelObjectViewModel>(await GetChildrenObjects());
+            } catch(OperationCanceledException) {
+                isCancelled = true;
+                IsLoadedChildren = false;
+                IsExpanded = false;
             } finally {
-                IsLoadedChildren = true;
+                if(!isCancelled) {
+                    IsLoadedChildren = true;
+                }
             }
         }
 
         private bool CanLoadChildrenObjects() {
             return !IsLoadedChildren;
         }
-        
+
         private async Task ReLoadChildrenObjects() {
             Children.Clear();
             IsLoadedChildren = false;
